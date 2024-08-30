@@ -1,0 +1,68 @@
+{
+  "livros": [
+    {
+      "id": "1",
+      "name": "Dom Casmurro",
+      "isbn": "9873145889",
+      "categoria": "Romance",
+      "condicao": "Novo",
+      "autor": "Machado de Assis",
+      "anunciante": "Roberto",
+      "image": "https://i.imgur.com/Z8veXRM.jpeg",
+      "descricao": "teste Descricao"
+    },
+    {
+      "id": "2",
+      "name": "A música no seu cérebro",
+      "isbn": "9873145889",
+      "categoria": "Ciencia",
+      "condicao": "Novo",
+      "autor": " Daniel J. Levitin ",
+      "anunciante": "Marcio",
+      "image": "https://i.imgur.com/dUwbBlP.jpeg",
+      "descricao": "teste descricao"
+    },
+    {
+      "id": "3",
+      "name": "Comunicação não violenta",
+      "isbn": "9873145889",
+      "categoria": "Ciencia",
+      "condicao": "Novo",
+      "autor": "Marshall B. Rosenberg",
+      "anunciante": "Vitoria",
+      "image": "https://i.imgur.com/EV1E7GD.jpeg",
+      "descricao": "teste Descricao"
+    },
+    {
+      "id": "4",
+      "name": "Vigiar e Punir",
+      "isbn": "9873145889",
+      "categoria": "Sociologia",
+      "condicao": "Usado",
+      "autor": "Michel Foucault",
+      "anunciante": "Roberto",
+      "image": "https://i.imgur.com/k3qZSr3.jpeg",
+      "descricao": "teste Descricao"
+    },
+    {
+      "id": "5",
+      "name": "O lobo da estepe",
+      "isbn": "9873145889",
+      "categoria": "Ficção",
+      "condicao": "Novo",
+      "autor": "Hermann Hesse ",
+      "anunciante": "Roberto",
+      "image": "https://i.imgur.com/hn1zR01.jpeg",
+      "descricao": "teste Descricao"
+    }
+  ],
+  "usuarios": [
+    {
+      "id": "1",
+      "nome": "João Silva",
+      "email": "joãoSilva@gmail.com",
+      "tipoConta": "Premium",
+      "fotoPerfil": "https://i.imgur.com/Z8veXRM.jpeg"
+    }
+  ]
+}
