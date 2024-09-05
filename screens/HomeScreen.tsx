@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useTheme } from "react-native-paper";
 
 import globalStyles from "@/styles/globalStyles";
@@ -10,6 +10,7 @@ import { AnunciostListaVertical } from "../components/listaAnuncios";
 import { LivrosDestaque } from "../components/livrosDestaque";
 import { HorizontalMenu } from "../components/menu";
 import { Section } from "../components/section";
+import styles from "../styles/HomeScreenStyles";
 
 export default function HomeScreen() {
   const { colors } = useTheme(); /* dps tem que começar a trabalhar com tema */
@@ -49,17 +50,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-    backgroundColor: "#E3F2FD", // Equivalente ao 'bg-blue-50'
-  },
-  innerContainer: {
-    width: "100%",
-    paddingHorizontal: 16, // Equivalente ao 'px-4'
-  },
-});
