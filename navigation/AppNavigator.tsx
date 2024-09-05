@@ -7,6 +7,7 @@ import { DetalhesDoLivroScreen } from "../screens/DetalhesDoLivroScreen";
 import { EventoScreen } from "../screens/EventoScreen";
 import HomeScreen from "../screens/HomeScreen";
 import { PerfilScreen } from "../screens/PerfilScreen";
+import CadastroUsuarioScreen from "@/screens/CadastroUsuarioScreen";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   Perfil: undefined;
   Evento: undefined;
   Login: undefined;
+  CadastroUsuario: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -67,6 +69,14 @@ export function AppNavigator() {
         component={LoginScreen}
         options={{
           title: "Login",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CadastroUsuario"
+        component={CadastroUsuarioScreen}
+        options={{
+          title: "CadastroUsuario",
           headerShown: false,
         }}
       />

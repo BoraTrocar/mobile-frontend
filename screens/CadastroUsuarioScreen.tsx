@@ -13,22 +13,21 @@ import {
 import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "../navigation/AppNavigator";
 
-type LoginScreenNavigationProp = StackNavigationProp<
+type SignUpScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  "Home"
+  "Login"
 >;
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
   const { colors } = useTheme();
-  const navigation = useNavigation<LoginScreenNavigationProp>();
+  const navigation = useNavigation<SignUpScreenNavigationProp>();
 
-  const handleLogin = () => {
-    console.log("Apertou o login esta bagaça");
-    navigation.navigate("CadastroUsuario");
+  const handleSignUpPress = () => {
+    console.log("FOIIIIII");
   };
-  
-  const handleContinueSemLogin = () => {
-    navigation.navigate("Home");
+
+  const handleBackToLogin = () => {
+    navigation.navigate("Login");
   };
 
   return (
@@ -38,7 +37,9 @@ export default function LoginScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.innerContainer}>
-          <Text style={styles.title}>Login</Text>
+          <Text style={styles.title}>Cadastro</Text>
+
+          <TextInput style={styles.input} placeholder="Nome" />
 
           <TextInput
             style={styles.input}
@@ -47,36 +48,31 @@ export default function LoginScreen() {
             autoCapitalize="none"
           />
 
+          <TextInput style={styles.input} placeholder="Nickname" />
+
           <TextInput style={styles.input} placeholder="Senha" secureTextEntry />
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Entrar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Cadastre-se</Text>
+          <TextInput style={styles.input} placeholder="Data de Nascimento" />
+
+          <TextInput
+            style={styles.input}
+            placeholder="CEP"
+            keyboardType="numeric"
+          />
+
+          <TextInput style={styles.input} placeholder="Cidade" />
+
+          <TextInput style={styles.input} placeholder="UF" />
+
+          <TouchableOpacity style={styles.button} onPress={handleSignUpPress}>
+            <Text style={styles.buttonText}>Cadastrar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.link}
-            onPress={() => console.log("Esqueci a senha")}
-          >
-            <Text style={styles.linkText}>Esqueci a senha</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.continueWithoutLoginButton}
-            onPress={handleContinueSemLogin}
-          >
-            <Text style={styles.continueWithoutLoginText}>
-              Continue sem login
-            </Text>
+          <TouchableOpacity style={styles.link} onPress={handleBackToLogin}>
+            <Text style={styles.linkText}>Voltar para Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      <View style={styles.fixedMenu}>
-        {/* Adicione o menu ou outros elementos fixos, se necessário */}
-      </View>
     </View>
   );
 }
@@ -132,20 +128,6 @@ const styles = StyleSheet.create({
   linkText: {
     color: "#2196F3",
     fontSize: 16,
-  },
-  continueWithoutLoginButton: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#B0BEC5",
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 12,
-  },
-  continueWithoutLoginText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   fixedMenu: {
     position: "absolute",
