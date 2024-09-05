@@ -1,8 +1,9 @@
-import { LivroProps } from "../models/LivroProps";
-import { DetalhesDoLivroScreen } from "../screens/DetalhesDoLivroScreen";
+import LoginScreen from "@/screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { LivroProps } from "../models/LivroProps";
 import { ChatScreen } from "../screens/ChatScreen";
+import { DetalhesDoLivroScreen } from "../screens/DetalhesDoLivroScreen";
 import { EventoScreen } from "../screens/EventoScreen";
 import HomeScreen from "../screens/HomeScreen";
 import { PerfilScreen } from "../screens/PerfilScreen";
@@ -13,13 +14,14 @@ export type RootStackParamList = {
   Chat: undefined;
   Perfil: undefined;
   Evento: undefined;
+  Login: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Home"
         component={HomeScreen}
@@ -57,6 +59,14 @@ export function AppNavigator() {
         component={EventoScreen}
         options={{
           title: "Evento",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          title: "Login",
           headerShown: false,
         }}
       />
