@@ -3,9 +3,10 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Appbar, Button, Card, Text } from "react-native-paper";
+import { Button, Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
 import globalStyles from "../styles/globalStyles";
+import { Header } from "@/components/header";
 
 type DetalhesDoLivroScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -26,10 +27,7 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      {/*    <Appbar.Header>
-        <Appbar.Content title="Detalhes do Livro" />
-      </Appbar.Header>
- */}
+     {/*  <Header /> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cardContainer}>
           <Card style={styles.largeCard}>

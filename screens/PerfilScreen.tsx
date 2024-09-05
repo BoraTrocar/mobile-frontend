@@ -1,19 +1,20 @@
+import { Header } from "@/components/header";
+import globalStyles from "@/styles/globalStyles";
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet, View } from "react-native";
-import { Text, Button, Card } from "react-native-paper";
+import { Image, StyleSheet, View } from "react-native";
+import { Button, Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
 import { Usuario } from "../models/Usuario";
-import { UserService } from "../services/usuario.service";
-import globalStyles from "@/styles/globalStyles";
+import { UsuarioService } from "../services/usuario.service";
 
 export function PerfilScreen() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
-  const userService = new UserService();
+  const usuarioService = new UsuarioService();
 
   useEffect(() => {
     async function fetchUsuario() {
       try {
-        const data = await userService.getUsuario();
+        const data = await usuarioService.getUsuario();
         if (data.length > 0) {
           setUsuario(data[0]);
         }
@@ -39,6 +40,7 @@ export function PerfilScreen() {
 
   return (
     <View style={styles.container}>
+      <Header />
       <Button
         mode="contained"
         style={styles.logoutButton}
@@ -67,6 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E3F2FD",
     padding: 16,
+    paddingTop: 0,
   },
   centered: {
     flex: 1,

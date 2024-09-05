@@ -11,15 +11,12 @@ import { LivrosDestaque } from "../components/livrosDestaque";
 import { HorizontalMenu } from "../components/menu";
 import { Section } from "../components/section";
 
-const statusBarHeight = Constants.statusBarHeight;
-
 export default function HomeScreen() {
-  const { colors } = useTheme();
+  const { colors } = useTheme(); /* dps tem que começar a trabalhar com tema */
 
   return (
     <View style={styles.container}>
       <ScrollView
-        contentContainerStyle={{ paddingTop: statusBarHeight + 8 }}
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
       >

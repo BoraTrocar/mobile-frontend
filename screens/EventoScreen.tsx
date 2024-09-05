@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Text, Button, Appbar, Card } from "react-native-paper";
-import { Calendar } from "react-native-calendars";
-import { HorizontalMenu } from "../components/menu";
 import { format } from "date-fns";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Calendar } from "react-native-calendars";
+import { Appbar, Card, Text } from "react-native-paper";
+import { HorizontalMenu } from "../components/menu";
+import { Header } from "@/components/header";
 
 interface DayObject {
   dateString: string;
@@ -75,10 +76,7 @@ export function EventoScreen() {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header>
-        <Appbar.Content title="Eventos" />
-      </Appbar.Header>
-
+      <Header />
       <Calendar
         onDayPress={(day: DayObject) => {
           setSelectedDate(day.dateString);
@@ -132,7 +130,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   fixedMenu: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,

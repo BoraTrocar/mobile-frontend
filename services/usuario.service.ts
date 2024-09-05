@@ -1,7 +1,7 @@
 import { Usuario } from "../models/Usuario";
 import { ApiService } from "./api.service";
 
-export class UserService {
+export class UsuarioService {
   private apiService = new ApiService();
 
   async getUsuario(): Promise<Usuario[]> {
