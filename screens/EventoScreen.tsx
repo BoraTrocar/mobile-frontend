@@ -1,10 +1,11 @@
+import { Header } from "@/components/header";
+import globalStyles from "@/styles/globalStyles";
 import { format } from "date-fns";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { Appbar, Card, Text } from "react-native-paper";
+import { Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
-import { Header } from "@/components/header";
 
 interface DayObject {
   dateString: string;
@@ -101,7 +102,7 @@ export function EventoScreen() {
         )}
       </View>
 
-      <View style={styles.fixedMenu}>
+      <View style={globalStyles.fixedMenu}>
         <HorizontalMenu />
       </View>
     </View>
@@ -128,12 +129,5 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     marginBottom: 8,
-  },
-  fixedMenu: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    // Adicione outros estilos conforme necessário
   },
 });

@@ -26,7 +26,7 @@ export default function LoginScreen() {
     console.log("Apertou o login esta bagaça");
     navigation.navigate("CadastroUsuario");
   };
-  
+
   const handleContinueSemLogin = () => {
     navigation.navigate("Home");
   };
@@ -73,10 +73,6 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      <View style={styles.fixedMenu}>
-        {/* Adicione o menu ou outros elementos fixos, se necessário */}
-      </View>
     </View>
   );
 }

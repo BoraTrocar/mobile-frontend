@@ -1,8 +1,8 @@
-import Constants from "expo-constants";
 import React from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";
 
+import globalStyles from "@/styles/globalStyles";
 import { Banner } from "../components/banner";
 import { BarraDePesquisa } from "../components/barraDePesquisa";
 import { Header } from "../components/header";
@@ -43,7 +43,7 @@ export default function HomeScreen() {
         <AnunciostListaVertical />
       </ScrollView>
 
-      <View style={styles.fixedMenu}>
+      <View style={globalStyles.fixedMenu}>
         <HorizontalMenu />
       </View>
     </View>
@@ -61,12 +61,5 @@ const styles = StyleSheet.create({
   innerContainer: {
     width: "100%",
     paddingHorizontal: 16, // Equivalente ao 'px-4'
-  },
-  fixedMenu: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    // Adicione outros estilos conforme necessário
   },
 });
