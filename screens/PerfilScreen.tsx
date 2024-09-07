@@ -1,16 +1,25 @@
 import { Header } from "@/components/header";
+import { RootStackParamList } from "@/navigation/AppNavigator";
 import globalStyles from "@/styles/globalStyles";
 import styles from "@/styles/PerfilScreenStyles";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Image, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { Button, Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
 import { Usuario } from "../models/Usuario";
 import { UsuarioService } from "../services/usuario.service";
 
+type PerfilScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Perfil"
+>;
+
 export function PerfilScreen() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const usuarioService = new UsuarioService();
+  const navigation = useNavigation<PerfilScreenNavigationProp>();
 
   useEffect(() => {
     async function fetchUsuario() {
@@ -29,6 +38,10 @@ export function PerfilScreen() {
 
   const handleLogout = () => {
     console.log("Deslogado");
+  };
+
+  const goToCadastrarLivro = () => {
+    navigation.navigate("CadastroLivro");
   };
 
   if (!usuario) {
@@ -58,7 +71,12 @@ export function PerfilScreen() {
           <Text style={styles.accountType}>{usuario.tipoConta}</Text>
         </View>
       </Card>
-
+      <TouchableOpacity
+        style={styles.cadastrarButton}
+        onPress={goToCadastrarLivro}
+      >
+        <Text style={styles.buttonText}>Cadastrar Livro</Text>
+      </TouchableOpacity>
       <View style={globalStyles.fixedMenu}>
         <HorizontalMenu />
       </View>

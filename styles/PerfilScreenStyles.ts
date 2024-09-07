@@ -51,6 +51,20 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     backgroundColor: "#4eb3de",
   },
+  cadastrarButton: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#2196F3",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
 
 export default styles;
