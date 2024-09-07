@@ -1,4 +1,4 @@
-import { Usuario } from "../models/Usuario";
+import { Usuario } from "@/models/Usuario";
 import { ApiService } from "./api.service";
 
 export class UsuarioService {
@@ -10,6 +10,15 @@ export class UsuarioService {
       return data;
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);
+      throw error;
+    }
+  }
+
+  async cadastrarUsuario(usuario: any) {
+    try {
+      await this.apiService.post("/usuario/cadastrar", usuario);
+    } catch (error) {
+      console.error("Erro ao cadastrar usuário:", error);
       throw error;
     }
   }
