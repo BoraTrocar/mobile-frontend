@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
   },
+  imageUrlInput: {
+    display: "none", // Esconde o campo de texto da URL da imagem
+  },
   textArea: {
     height: 100,
     textAlignVertical: "top",
@@ -55,6 +58,25 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  imagePickerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 20,
+  },
+  imagePickerButton: {
+    flex: 1,
+    marginHorizontal: 8,
+  },
+  cameraButton: {
+    backgroundColor: "#FF5722", // Cor diferente para o botão da câmera
+  },
+  image: {
+    width: 150,
+    height: 170,
+    borderRadius: 8,
+    marginBottom: 20,
   },
 });
 

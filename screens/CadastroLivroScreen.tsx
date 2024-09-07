@@ -1,22 +1,26 @@
-import { HorizontalMenu } from "@/components/menu";
-import styles from "@/styles/CadastroLivroScreen";
-import globalStyles from "@/styles/globalStyles";
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
+  Alert,
+  Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Button, useTheme } from "react-native-paper";
+import styles from "@/styles/CadastroLivroScreen";
 
 export default function CadastroLivroScreen() {
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState<string | null>(null);
   const [isbn, setIsbn] = useState("");
   const [categoria, setCategoria] = useState("");
   const [autor, setAutor] = useState("");
   const [condicao, setCondicao] = useState("");
   const [descricao, setDescricao] = useState("");
+
+  const { colors } = useTheme();
 
   const handleCadastrar = () => {
     console.log("Livro cadastrado", {
@@ -30,7 +34,7 @@ export default function CadastroLivroScreen() {
   };
 
   const handleLimpar = () => {
-    setImg("");
+    setImg(null);
     setIsbn("");
     setCategoria("");
     setAutor("");
@@ -38,15 +42,66 @@ export default function CadastroLivroScreen() {
     setDescricao("");
   };
 
+  const handlePickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImg(result.assets[0].uri || null);
+    }
+  };
+
+  const handleOpenCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImg(result.assets[0].uri || null);
+    }
+  };
+
+  const handleImagePress = () => {
+    Alert.alert("Escolher Imagem", "Escolha uma opção", [
+      {
+        text: "Escolher Imagem",
+        onPress: handlePickImage,
+      },
+      {
+        text: "Abrir Câmera",
+        onPress: handleOpenCamera,
+      },
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+    ]);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Cadastrar Livro</Text>
 
+        <TouchableOpacity onPress={handleImagePress}>
+          <Image
+            source={
+              img ? { uri: img } : require("@/assets/images/placeholder.jpg")
+            }
+            style={styles.image}
+          />
+        </TouchableOpacity>
+
         <TextInput
-          style={styles.input}
+          style={[styles.input, styles.imageUrlInput]}
           placeholder="Imagem URL"
-          value={img}
+          value={img || ""}
           onChangeText={setImg}
         />
 
@@ -99,9 +154,6 @@ export default function CadastroLivroScreen() {
         >
           <Text style={styles.buttonText}>Limpar</Text>
         </TouchableOpacity>
-      </View>
-      <View style={globalStyles.fixedMenu}>
-        <HorizontalMenu />
       </View>
     </ScrollView>
   );
