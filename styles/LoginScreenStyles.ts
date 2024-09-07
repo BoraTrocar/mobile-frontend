@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
+  logo: {
+    width: 250,
+    height: 150,
+    marginBottom: 25,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
