@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import axios from "axios";
 import Constants from "expo-constants";
 import {
   getCurrentPositionAsync,
-  LocationObject,
   requestForegroundPermissionsAsync,
 } from "expo-location";
 import React, { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ export function Header() {
   const { colors } = useTheme();
   const statusBarHeight = Constants.statusBarHeight;
   const [usuario, setUsuario] = useState<Usuario | null>(null);
-  const [location, setLocation] = useState<LocationObject | null>(null);
+  const [city, setCity] = useState<string | null>(null);
   const navigation = useNavigation<HeaderNavigationProp>();
 
   useEffect(() => {
@@ -38,22 +38,22 @@ export function Header() {
     fetchUsuario();
   }, []);
 
-  // Função para redirecionar para a tela de perfil
   const handleUserPress = () => {
     if (usuario) {
       navigation.navigate("Perfil");
     }
   };
 
-  // Função para solicitar permissão de localização
   const requestLocationPermission = async () => {
     try {
       const { granted } = await requestForegroundPermissionsAsync();
 
       if (granted) {
         const currentPosition = await getCurrentPositionAsync();
-        setLocation(currentPosition);
-        console.log("Localização atual: ", currentPosition);
+        const { latitude, longitude } = currentPosition.coords;
+        console.log("Localização obtida:", latitude, longitude);
+
+        fetchCityFromCoordinates(latitude, longitude);
       } else {
         console.log("Permissão de localização negada");
       }
@@ -62,14 +62,37 @@ export function Header() {
     }
   };
 
+  // Carai deu certo kkkkkkkkkkkkkkkkkkkkkkkkk
+  const fetchCityFromCoordinates = async (
+    latitude: number,
+    longitude: number
+  ) => {
+    try {
+      const apiKey = "18624a987510c4a0758cc7006109c8e5";
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`
+      );
+
+      if (response.data.name) {
+        const cityName = response.data.name;
+        setCity(cityName);
+        console.log("Cidade: ", cityName);
+      } else {
+        console.log("Não foi possível obter o nome da cidade");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar cidade:", error);
+    }
+  };
+
   return (
     <View style={[styles.container, { paddingTop: statusBarHeight }]}>
       <View style={styles.leftContainer}>
-        <Text style={styles.text}>Cotia</Text>
+        <Text style={styles.text}>{city || "Localização Desconhecida"}</Text>
         <IconButton
           icon="map-marker"
           size={20}
-          onPress={requestLocationPermission} // Chama a função ao clicar
+          onPress={requestLocationPermission} // Chama a função ao clicar no icone la 
           iconColor={"red"}
         />
       </View>
