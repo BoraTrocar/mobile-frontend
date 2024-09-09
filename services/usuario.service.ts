@@ -22,4 +22,12 @@ export class UsuarioService {
       throw error;
     }
   }
+  async loginUsuario(usuario: any) {
+    try {
+      await this.apiService.post("/usuario/logar", usuario);
+    } catch (error) {
+      console.error("Erro ao realizar login:", error);
+      throw error;
+    }
+  }
 }
