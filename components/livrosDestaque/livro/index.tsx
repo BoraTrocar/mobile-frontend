@@ -9,10 +9,10 @@ export function CardHorizontallivro({ livro }: { livro: LivroProps }) {
       <Card style={styles.card}>
         <Card.Cover source={{ uri: livro.image }} style={styles.cover} />
         <Card.Content style={styles.content}>
-          <Title style={styles.title}>{livro.name}</Title>
+          <Title style={styles.title}>{livro.nomeLivro}</Title>
           <Paragraph style={styles.author}>{livro.autor}</Paragraph>
           <Paragraph style={styles.advertiser}>
-            Anunciante: {livro.anunciante}
+            Anunciante: {livro.usuario}
           </Paragraph>
         </Card.Content>
       </Card>

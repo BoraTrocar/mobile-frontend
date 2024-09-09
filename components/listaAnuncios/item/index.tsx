@@ -15,7 +15,7 @@ export function AnuncioItem({ item, onPress }: Props) {
         <Card.Cover source={{ uri: item.image }} style={styles.image} />
         <Card.Content style={styles.content}>
           <Text style={styles.title} numberOfLines={2}>
-            {item.name}
+            {item.nomeLivro}
           </Text>
           <View style={styles.infoContainer}>
             <Text style={styles.author}>{item.autor}</Text>

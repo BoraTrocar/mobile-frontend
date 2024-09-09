@@ -34,7 +34,7 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
           <Card style={styles.largeCard}>
             <Card.Content style={styles.cardContent}>
               <Text variant="headlineLarge" style={styles.title}>
-                {livro.name}
+                {livro.nomeLivro}
               </Text>
               <Card.Cover source={{ uri: livro.image }} style={styles.image} />
               <Text variant="bodyLarge" style={styles.info}>
@@ -43,7 +43,7 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
               </Text>
               <Text variant="bodyLarge" style={styles.info}>
                 <Text style={styles.bold}>Anunciante: </Text>
-                {livro.anunciante}
+                {livro.usuario}
               </Text>
               <Text variant="bodyLarge" style={styles.info}>
                 <Text style={styles.bold}>Categoria: </Text>

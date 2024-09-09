@@ -1,11 +1,11 @@
 export interface LivroProps {
-  id: string;
-  name: string;
+  idLivro: number;
+  nomeLivro: string;
   isbn: string;
   categoria: string;
   condicao: string;
   autor: string;
-  anunciante: string;
+  usuario: string;
   descricao: string;
   image: string;
 }

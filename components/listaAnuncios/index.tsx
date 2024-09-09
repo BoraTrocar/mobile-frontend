@@ -17,7 +17,7 @@ export function AnunciostListaVertical() {
   useEffect(() => {
     async function getAnuncios() {
       try {
-        const data = await apiService.get("/livros");
+        const data = await apiService.get("/livro/all");
         setAnuncios(data);
       } catch (error) {
         console.error("Erro ao buscar anúncios:", error);
@@ -35,7 +35,7 @@ export function AnunciostListaVertical() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.grid}>
         {anuncios.map((item) => (
-          <View key={item.id.toString()} style={styles.itemContainer}>
+          <View key={item.idLivro.toString()} style={styles.itemContainer}>
             <AnuncioItem item={item} onPress={handlePress} />
           </View>
         ))}

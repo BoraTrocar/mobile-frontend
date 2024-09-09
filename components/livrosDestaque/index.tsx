@@ -11,7 +11,7 @@ export function LivrosDestaque() {
   useEffect(() => {
     async function getLivros() {
       try {
-        const data = await apiService.get("/livros");
+        const data = await apiService.get("/livro/all");
         setLivros(data);
       } catch (error) {
         console.error("Erro ao buscar livros:", error);
