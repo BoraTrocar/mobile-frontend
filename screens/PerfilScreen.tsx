@@ -2,7 +2,7 @@ import { Header } from "@/components/header";
 import { RootStackParamList } from "@/navigation/AppNavigator";
 import styles from "@/styles/PerfilScreenStyles";
 import globalStyles from "@/styles/globalStyles";
-import { getToken } from "@/token/tokenStorage";
+import { getToken, removeToken } from "@/token/tokenStorage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
@@ -44,8 +44,14 @@ export function PerfilScreen() {
     fetchUsuario();
   }, []);
 
-  const handleLogout = () => {
-    console.log("Deslogado");
+  const handleLogout = async () => {
+    try {
+      await removeToken(); // Remove o token
+      console.log("Deslogado");
+      navigation.navigate("Login"); // Redireciona para a tela de login (ou outra tela relevante)
+    } catch (error) {
+      console.error("Erro ao deslogar:", error);
+    }
   };
 
   const goToCadastrarLivro = () => {
