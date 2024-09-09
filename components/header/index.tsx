@@ -12,6 +12,7 @@ import { IconButton, useTheme } from "react-native-paper";
 import { Usuario } from "../../models/Usuario";
 import { RootStackParamList } from "../../navigation/AppNavigator";
 import { UsuarioService } from "../../services/usuario.service";
+import { getToken } from "@/token/tokenStorage";
 
 type HeaderNavigationProp = StackNavigationProp<RootStackParamList, "Perfil">;
 
@@ -25,11 +26,14 @@ export function Header() {
   useEffect(() => {
     async function fetchUsuario() {
       try {
-        const usuarioService = new UsuarioService();
-        const data = await usuarioService.getUsuario();
-        if (data.length > 0) {
-          setUsuario(data[0]);
+        const token = await getToken();
+        if (!token) {
+          throw new Error("Token não encontrado");
         }
+
+        const usuarioService = new UsuarioService();
+        const data = await usuarioService.perfilUsuario(token);
+        setUsuario(data);
       } catch (error) {
         console.error("Erro ao buscar usuário:", error);
       }
@@ -62,7 +66,6 @@ export function Header() {
     }
   };
 
-  // Carai deu certo kkkkkkkkkkkkkkkkkkkkkkkkk
   const fetchCityFromCoordinates = async (
     latitude: number,
     longitude: number
@@ -92,13 +95,13 @@ export function Header() {
         <IconButton
           icon="map-marker"
           size={20}
-          onPress={requestLocationPermission} // Chama a função ao clicar no icone la 
-          iconColor={"red"}
+          onPress={requestLocationPermission}
+          iconColor={colors.primary}
         />
       </View>
       {usuario && (
         <TouchableOpacity onPress={handleUserPress}>
-          <Text style={styles.userName}>{usuario.nome}</Text>
+          <Text style={styles.userName}>{usuario.nomeCompleto}</Text>
         </TouchableOpacity>
       )}
     </View>

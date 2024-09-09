@@ -22,11 +22,28 @@ export class UsuarioService {
       throw error;
     }
   }
-  async loginUsuario(usuario: any) {
+  // UsuarioService.ts
+  async loginUsuario(usuario: any): Promise<string> {
     try {
-      await this.apiService.post("/usuario/logar", usuario);
+      const response = await this.apiService.post("/usuario/logar", usuario);
+      return response.token;
     } catch (error) {
       console.error("Erro ao realizar login:", error);
+      throw error;
+    }
+  }
+
+  async perfilUsuario(token: string): Promise<Usuario> {
+    try {
+      const headers = {
+        Authorization: `${token}`,
+      };
+      const response = await this.apiService.get("/usuario/perfil", {
+        headers,
+      });
+      return response as Usuario; // Garante que o tipo retornado é Usuario
+    } catch (error) {
+      console.error("Erro ao encontrar perfil:", error);
       throw error;
     }
   }

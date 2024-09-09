@@ -13,6 +13,7 @@ import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/LoginScreenStyles";
+import { setToken } from '../token/tokenStorage'; // Importa a função para salvar o token
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,7 +33,8 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     try {
       const usuario = { email, senha };
-      await usuarioService.loginUsuario(usuario);
+      const token = await usuarioService.loginUsuario(usuario); // Obtém o token
+      await setToken(token); // Salva o token no AsyncStorage
       console.log("Login realizado com sucesso");
       setErrorMessage(""); // Limpa a mensagem de erro em caso de sucesso
       navigation.navigate("Home");
@@ -41,9 +43,11 @@ export default function LoginScreen() {
       setErrorMessage("Falha no login. Verifique suas credenciais."); // Define a mensagem de erro
     }
   };
-
   const handleContinueSemLogin = () => {
     navigation.navigate("Home");
+  };
+  const handleCadastroUsuario = () => {
+    navigation.navigate("CadastroUsuario");
   };
 
   return (
@@ -87,7 +91,10 @@ export default function LoginScreen() {
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleCadastroUsuario}
+          >
             <Text style={styles.buttonText}>Cadastre-se</Text>
           </TouchableOpacity>
 

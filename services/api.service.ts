@@ -1,14 +1,24 @@
 import axios from "axios";
 import { environment } from "../environments/environments";
 
+interface Headers {
+  [key: string]: string;
+}
+
 export class ApiService {
-  //To trabalhando com as duas api's ao mesmo tempo por enquanto a api real por enquanto so atende o cadastro de usuario.
   private readonly URL = environment.apiUrlReal;
   private readonly UrlTeste = environment.apiUrl;
 
-  async get(endpoint: string) {
+  async get(endpoint: string, config?: { headers?: Headers }) {
     try {
-      const response = await fetch(`${this.UrlTeste}${endpoint}`);
+      const response = await fetch(`${this.URL}${endpoint}`, {
+        method: "GET",
+        headers: {
+          ...config?.headers,
+          "Content-Type": "application/json",
+        },
+      });
+
       if (!response.ok) {
         throw new Error(
           `Erro na requisição GET: ${response.status} - ${response.statusText}`
@@ -21,10 +31,11 @@ export class ApiService {
     }
   }
 
-  async post(endpoint: string, data: any) {
+  async post(endpoint: string, data: any, headers?: Headers) {
     try {
       const response = await axios.post(`${this.URL}${endpoint}`, data, {
         headers: {
+          ...headers,
           "Content-Type": "application/json",
         },
       });
@@ -43,5 +54,4 @@ export class ApiService {
       throw new Error(errorMessage);
     }
   }
-  // Adicionar o path dps
 }
