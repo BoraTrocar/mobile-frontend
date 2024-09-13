@@ -1,3 +1,4 @@
+import { getToken } from "@/token/tokenStorage"; // Importe o serviço de token
 import axios from "axios";
 import { environment } from "../environments/environments";
 
@@ -9,13 +10,27 @@ export class ApiService {
   private readonly URL = environment.apiUrlReal;
   private readonly UrlTeste = environment.apiUrl;
 
+  //Nao sei se esse se deveria estar aqui, talvez tenha q colocar la junto com token o ou no controle de rota para autenticar.
+  private async getAuthHeaders(): Promise<Headers> {
+    const token = await getToken();
+    const headers = {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `${token}` } : {}),
+    };
+
+    return headers;
+  }
+
   async get(endpoint: string, config?: { headers?: Headers }) {
     try {
-      const response = await fetch(`${this.URL}${endpoint}`, {
+      const headers = await this.getAuthHeaders();
+      const url = `${this.URL}${endpoint}`;
+
+      const response = await fetch(url, {
         method: "GET",
         headers: {
+          ...headers,
           ...config?.headers,
-          "Content-Type": "application/json",
         },
       });
 
@@ -31,12 +46,15 @@ export class ApiService {
     }
   }
 
+  //O post agora funciona
   async post(endpoint: string, data: any, headers?: Headers) {
     try {
-      const response = await axios.post(`${this.URL}${endpoint}`, data, {
+      const authHeaders = await this.getAuthHeaders();
+      const url = `${this.URL}${endpoint}`;
+      const response = await axios.post(url, data, {
         headers: {
+          ...authHeaders,
           ...headers,
-          "Content-Type": "application/json",
         },
       });
 

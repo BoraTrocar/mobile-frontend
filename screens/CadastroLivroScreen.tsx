@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Button, useTheme } from "react-native-paper";
 import styles from "@/styles/CadastroLivroScreen";
+import LivroService from "@/services/livro.service"; // Importe o LivroService
 
 export default function CadastroLivroScreen() {
   const [img, setImg] = useState<string | null>(null);
@@ -22,15 +23,21 @@ export default function CadastroLivroScreen() {
 
   const { colors } = useTheme();
 
-  const handleCadastrar = () => {
-    console.log("Livro cadastrado", {
-      img,
-      isbn,
-      categoria,
-      autor,
-      condicao,
-      descricao,
-    });
+  const handleCadastrar = async () => {
+    try {
+      await LivroService.cadastrarLivro({
+        img,
+        isbn,
+        categoria,
+        autor,
+        condicao,
+        descricao,
+      });
+      Alert.alert("Sucesso", "Livro cadastrado com sucesso!");
+      handleLimpar(); // Limpa os campos após o cadastro
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível cadastrar o livro.");
+    }
   };
 
   const handleLimpar = () => {
@@ -42,6 +49,7 @@ export default function CadastroLivroScreen() {
     setDescricao("");
   };
 
+  //Acho que isso deve virar um componente pickImg ou algo assim
   const handlePickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
