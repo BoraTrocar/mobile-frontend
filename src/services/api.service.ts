@@ -7,8 +7,7 @@ interface Headers {
 }
 
 export class ApiService {
-  private readonly URL = environment.apiUrlReal;
-  private readonly UrlTeste = environment.apiUrl;
+  private readonly URL = environment.apiUrl;
 
   //Nao sei se esse se deveria estar aqui, talvez tenha q colocar la junto com token o ou no controle de rota para autenticar.
   private async getAuthHeaders(): Promise<Headers> {
