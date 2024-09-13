@@ -1,9 +1,9 @@
-import CadastroLivroScreen from "@/screens/CadastroLivroScreen";
-import CadastroUsuarioScreen from "@/screens/CadastroUsuarioScreen";
-import LoginScreen from "@/screens/LoginScreen";
+import CadastroLivroScreen from "../screens/CadastroLivroScreen";
+import CadastroUsuarioScreen from "../screens/CadastroUsuarioScreen";
+import LoginScreen from "../screens/LoginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import { LocationProvider } from "../LocationContext"; // Importe o LocationProvider
+import { LocationProvider } from "../../LocationContext"; // Importe o LocationProvider
 import { LivroProps } from "../models/LivroProps";
 import { ChatScreen } from "../screens/ChatScreen";
 import { DetalhesDoLivroScreen } from "../screens/DetalhesDoLivroScreen";

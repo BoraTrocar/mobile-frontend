@@ -1,4 +1,4 @@
-import { RootStackParamList } from "@/navigation/AppNavigator";
+import { RootStackParamList } from "../navigation/AppNavigator";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
@@ -7,7 +7,7 @@ import { Button, Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/DetalhesDoLivroScreenStyles";
-import { Header } from "@/components/header";
+import { Header } from "../components/header";
 
 type DetalhesDoLivroScreenRouteProp = RouteProp<
   RootStackParamList,

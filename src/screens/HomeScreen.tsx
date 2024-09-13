@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView, View } from "react-native";
 import { useTheme } from "react-native-paper";
 
-import globalStyles from "@/styles/globalStyles";
+import globalStyles from "../styles/globalStyles";
 import { Banner } from "../components/banner";
 import { BarraDePesquisa } from "../components/barraDePesquisa";
 import { Header } from "../components/header";

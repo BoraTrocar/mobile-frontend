@@ -1,14 +1,14 @@
-import { getToken } from "@/token/tokenStorage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Constants from "expo-constants";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IconButton, useTheme } from "react-native-paper";
-import { useLocation } from "../../LocationContext"; // Importando o contexto
+import { useLocation } from "../../../LocationContext";
 import { Usuario } from "../../models/Usuario";
 import { RootStackParamList } from "../../navigation/AppNavigator";
 import { UsuarioService } from "../../services/usuario.service";
+import { getToken } from "../../token/tokenStorage";
 
 type HeaderNavigationProp = StackNavigationProp<RootStackParamList, "Perfil">;
 

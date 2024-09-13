@@ -9,14 +9,14 @@ export function Banner() {
       <PagerView style={styles.pagerView} initialPage={0} pageMargin={14}>
         <Pressable key="1" onPress={() => console.log("CLICOU NO BANNER 1")}>
           <Card.Cover
-            source={require("../../assets/images/bienal.jpg")}
+            source={require("../../../assets/images/bienal.jpg")}
             style={styles.image}
           />
         </Pressable>
 
         <Pressable key="2" onPress={() => console.log("CLICOU NO BANNER 2")}>
           <Card.Cover
-            source={require("../../assets/images/bienal-livro2.png")}
+            source={require("../../../assets/images/bienal-livro2.png")}
             style={styles.image}
           />
         </Pressable>
@@ -28,10 +28,10 @@ export function Banner() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 150, // Ajuste a altura conforme necessário
-    borderRadius: 16, // Para bordas arredondadas
-    marginVertical: 16, // Espaçamento superior e inferior
-    overflow: "hidden", // Para garantir que as bordas arredondadas sejam respeitadas
+    height: 150,
+    borderRadius: 16,
+    marginVertical: 16,
+    overflow: "hidden",
   },
   pagerView: {
     flex: 1,

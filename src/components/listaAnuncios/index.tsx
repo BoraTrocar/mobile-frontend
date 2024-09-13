@@ -1,11 +1,10 @@
-// AnunciostListaVertical.tsx
-import { LivroProps } from "@/models/LivroProps";
-import { RootStackParamList } from "@/navigation/AppNavigator";
-import { ApiService } from "@/services/api.service";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { LivroProps } from "../../models/LivroProps";
+import { RootStackParamList } from "../../navigation/AppNavigator";
+import { ApiService } from "../../services/api.service";
 import { AnuncioItem } from "./item";
 
 export function AnunciostListaVertical() {

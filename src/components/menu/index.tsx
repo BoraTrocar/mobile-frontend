@@ -1,9 +1,9 @@
-import { RootStackParamList } from "@/navigation/AppNavigator";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { Dimensions, FlatList, View } from "react-native";
 import { IconButton, Text } from "react-native-paper";
+import { RootStackParamList } from "../../navigation/AppNavigator";
 
 const screenWidth = Dimensions.get("window").width;
 

@@ -1,4 +1,4 @@
-import { Usuario } from "@/models/Usuario";
+import { Usuario } from "../models/Usuario";
 import { ApiService } from "./api.service";
 
 export class UsuarioService {

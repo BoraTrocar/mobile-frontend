@@ -1,4 +1,4 @@
-import { getToken } from "@/token/tokenStorage"; // Importe o serviço de token
+import { getToken } from "../token/tokenStorage"; // Importe o serviço de token
 import axios from "axios";
 import { environment } from "../environments/environments";
 

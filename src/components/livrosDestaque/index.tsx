@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
+import { LivroProps } from "../../models/LivroProps";
+import { ApiService } from "../../services/api.service";
 import { CardHorizontallivro } from "./livro";
-import { LivroProps } from "@/models/LivroProps";
-import { ApiService } from "@/services/api.service";
 
 export function LivrosDestaque() {
   const [livros, setLivros] = useState<LivroProps[]>([]);

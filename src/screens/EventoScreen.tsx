@@ -1,12 +1,12 @@
-import { Header } from "@/components/header";
-import globalStyles from "@/styles/globalStyles";
-import styles from "@/styles/EventoScreenStyles";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { Card, Text } from "react-native-paper";
+import { Header } from "../components/header";
 import { HorizontalMenu } from "../components/menu";
+import styles from "../styles/EventoScreenStyles";
+import globalStyles from "../styles/globalStyles";
 
 interface DayObject {
   dateString: string;

@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, useTheme } from "react-native-paper";
-import styles from "@/styles/CadastroLivroScreen";
-import LivroService from "@/services/livro.service"; // Importe o LivroService
+import { useTheme } from "react-native-paper";
+import LivroService from "../services/livro.service"; 
+import styles from "../styles/CadastroLivroScreen";
 
 export default function CadastroLivroScreen() {
   const [img, setImg] = useState<string | null>(null);

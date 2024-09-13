@@ -1,8 +1,8 @@
-import { Header } from "@/components/header";
-import { RootStackParamList } from "@/navigation/AppNavigator";
-import styles from "@/styles/PerfilScreenStyles";
-import globalStyles from "@/styles/globalStyles";
-import { getToken, removeToken } from "@/token/tokenStorage";
+import { Header } from "../components/header";
+import { RootStackParamList } from "../navigation/AppNavigator";
+import styles from "../styles/PerfilScreenStyles";
+import globalStyles from "../styles/globalStyles";
+import { getToken, removeToken } from "../token/tokenStorage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
