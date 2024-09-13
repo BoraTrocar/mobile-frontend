@@ -1,26 +1,47 @@
-# Welcome to your Expo app 👋
-
+# Bora trocar!
 O projeto foi criado com [Expo](https://expo.dev).
 
-## Get started
 
-1. Instale as dependencias
+## Instruções de Inicialização
+Siga os passos abaixo para configurar e iniciar o projeto:
+
+1. Clone o Repositório
+
+   ```bash
+   git clone https://github.com/BoraTrocar/mobile-frontend.git
+
+   ```
+
+2. Navegue até o Diretório do Projeto
+
+   ```bash
+   git clone mobile-frontend
+
+   ```
+
+3. Instale as dependencias
 
    ```bash
    npm install
    ```
 
-2. Inicie o app
+4. Altere apiUrl no arquivo environments.ts para seu IP local
+
+   ```code
+    export const environment = {
+        production: false,
+        apiUrl: "http://Seu_IP:8090",
+    };
+
+   ```
+
+5. Inicie o app
 
    ```bash
     npx expo start
    ```
 
-## Para rodar a api teste
 
-1. Execute o comando (execute a instalação da dependencia se necessario)
+## Para ter acesso a API
 
-```bash
-   son-server db.json
-   ```
-
+1. Acesse o repositorio [Back End](https://github.com/BoraTrocar/backendPrincipal)
