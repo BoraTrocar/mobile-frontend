@@ -49,7 +49,6 @@ export default function CadastroLivroScreen() {
     setDescricao("");
   };
 
-  //Acho que isso deve virar um componente pickImg ou algo assim
   const handlePickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -105,13 +104,6 @@ export default function CadastroLivroScreen() {
             style={styles.image}
           />
         </TouchableOpacity>
-
-        <TextInput
-          style={[styles.input, styles.imageUrlInput]}
-          placeholder="Imagem URL"
-          value={img || ""}
-          onChangeText={setImg}
-        />
 
         <TextInput
           style={styles.input}
