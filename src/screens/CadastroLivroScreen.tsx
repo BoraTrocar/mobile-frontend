@@ -10,12 +10,13 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "react-native-paper";
-import LivroService from "../services/livro.service"; 
+import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 
 export default function CadastroLivroScreen() {
   const [img, setImg] = useState<string | null>(null);
   const [isbn, setIsbn] = useState("");
+  const [nomeLivro, setNomeLivro] = useState("");
   const [categoria, setCategoria] = useState("");
   const [autor, setAutor] = useState("");
   const [condicao, setCondicao] = useState("");
@@ -28,6 +29,7 @@ export default function CadastroLivroScreen() {
       await LivroService.cadastrarLivro({
         img,
         isbn,
+        nomeLivro,
         categoria,
         autor,
         condicao,
@@ -43,6 +45,7 @@ export default function CadastroLivroScreen() {
   const handleLimpar = () => {
     setImg(null);
     setIsbn("");
+    setNomeLivro("");
     setCategoria("");
     setAutor("");
     setCondicao("");
@@ -110,6 +113,13 @@ export default function CadastroLivroScreen() {
           placeholder="ISBN"
           value={isbn}
           onChangeText={setIsbn}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Titulo"
+          value={nomeLivro}
+          onChangeText={setNomeLivro}
         />
 
         <TextInput

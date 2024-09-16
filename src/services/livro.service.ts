@@ -4,6 +4,7 @@ class LivroService extends ApiService {
   async cadastrarLivro(data: {
     img: string | null;
     isbn: string;
+    nomeLivro: string;
     categoria: string;
     autor: string;
     condicao: string;
@@ -13,6 +14,7 @@ class LivroService extends ApiService {
 
     // Append text fields
     formData.append("isbn", data.isbn);
+    formData.append("nomeLivro", data.nomeLivro);
     formData.append("categoria", data.categoria);
     formData.append("autor", data.autor);
     formData.append("condicao", data.condicao);
