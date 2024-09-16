@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { LivroProps } from "../../models/LivroProps";
 import { RootStackParamList } from "../../navigation/AppNavigator";
@@ -13,18 +13,22 @@ export function AnunciostListaVertical() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  useEffect(() => {
-    async function getAnuncios() {
-      try {
-        const data = await apiService.get("/livro/all");
-        setAnuncios(data);
-      } catch (error) {
-        console.error("Erro ao buscar anúncios:", error);
-      }
+  // tem q ir para o service essa func busca os anúncios
+  const getAnuncios = async () => {
+    try {
+      const data = await apiService.get("/livro/all");
+      setAnuncios(data);
+    } catch (error) {
+      console.error("Erro ao buscar anúncios:", error);
     }
+  };
 
-    getAnuncios();
-  }, []);
+  //Gambiarra para atualizar o componente 
+  useFocusEffect(
+    useCallback(() => {
+      getAnuncios(); // Vai mandar a request sempre o componente for chamado (em tese)
+    }, [])
+  );
 
   const handlePress = (item: LivroProps) => {
     navigation.navigate("DetalhesDoLivroScreen", { livro: item });
