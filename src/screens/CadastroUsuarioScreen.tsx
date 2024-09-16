@@ -14,6 +14,7 @@ import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/CadastroUsuarioScreenStyles";
+import stylesGlobal from "../styles/globalStyles";
 
 type CadastroUsuarioScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -35,7 +36,25 @@ export default function CadastroUsuarioScreen() {
   const [cidade, setCidade] = useState("");
   const [uf, setUf] = useState("");
 
+  const [errorFields, setErrorFields] = useState<string[]>([]);
+
   const handleSignUpPress = async () => {
+    const errors = [];
+    if (!nomeUsuario) errors.push("nomeUsuario");
+    if (!email) errors.push("email");
+    if (!nickname) errors.push("nickname");
+    if (!senha) errors.push("senha");
+    if (!dataNascimento) errors.push("dataNascimento");
+
+    if (errors.length > 0) {
+      setErrorFields(errors);
+      Alert.alert(
+        "Campos obrigatórios",
+        "Por favor, preencha todos os campos obrigatórios."
+      );
+      return;
+    }
+
     const newUser: UsuarioCadastro = {
       nomeUsuario,
       email,
@@ -72,6 +91,12 @@ export default function CadastroUsuarioScreen() {
     navigation.navigate("Login");
   };
 
+  const getInputStyle = (fieldName: string) => {
+    return errorFields.includes(fieldName)
+      ? [styles.input, stylesGlobal.errorInput]
+      : styles.input;
+  };
+
   return (
     /* Depois tem que ver para transformar cada input um componente ou algo assim */
     <View style={styles.container}>
@@ -83,41 +108,58 @@ export default function CadastroUsuarioScreen() {
           <Text style={styles.title}>Cadastro</Text>
 
           <TextInput
-            style={styles.input}
+            style={getInputStyle("nomeUsuario")}
             placeholder="Nome de Usuário"
             value={nomeUsuario}
-            onChangeText={setNomeUsuario}
+            onChangeText={(text) => {
+              setNomeUsuario(text);
+              setErrorFields((prev) => prev.filter((f) => f !== "nomeUsuario"));
+            }}
           />
 
           <TextInput
-            style={styles.input}
+            style={getInputStyle("email")}
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(text) => {
+              setEmail(text);
+              setErrorFields((prev) => prev.filter((f) => f !== "email"));
+            }}
           />
 
           <TextInput
-            style={styles.input}
+            style={getInputStyle("nickname")}
             placeholder="Nickname"
             value={nickname}
-            onChangeText={setNickname}
+            onChangeText={(text) => {
+              setNickname(text);
+              setErrorFields((prev) => prev.filter((f) => f !== "nickname"));
+            }}
           />
 
           <TextInput
-            style={styles.input}
+            style={getInputStyle("senha")}
             placeholder="Senha"
             secureTextEntry
             value={senha}
-            onChangeText={setSenha}
+            onChangeText={(text) => {
+              setSenha(text);
+              setErrorFields((prev) => prev.filter((f) => f !== "senha"));
+            }}
           />
 
           <TextInput
-            style={styles.input}
+            style={getInputStyle("dataNascimento")}
             placeholder="Data de Nascimento"
             value={dataNascimento}
-            onChangeText={setDataNascimento}
+            onChangeText={(text) => {
+              setDataNascimento(text);
+              setErrorFields((prev) =>
+                prev.filter((f) => f !== "dataNascimento")
+              );
+            }}
           />
 
           <TextInput

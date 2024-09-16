@@ -1,3 +1,4 @@
+import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
@@ -12,6 +13,7 @@ import {
 import { useTheme } from "react-native-paper";
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
+import stylesGlobal from "../styles/globalStyles";
 
 export default function CadastroLivroScreen() {
   const [img, setImg] = useState<string | null>(null);
@@ -21,10 +23,18 @@ export default function CadastroLivroScreen() {
   const [autor, setAutor] = useState("");
   const [condicao, setCondicao] = useState("");
   const [descricao, setDescricao] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { colors } = useTheme();
 
   const handleCadastrar = async () => {
+    setIsSubmitted(true);
+    //Acho que eu devo criar um arquivo global para tratar todos os forms
+    if (!nomeLivro || !categoria || !condicao) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
     try {
       await LivroService.cadastrarLivro({
         img,
@@ -50,6 +60,7 @@ export default function CadastroLivroScreen() {
     setAutor("");
     setCondicao("");
     setDescricao("");
+    setIsSubmitted(false);
   };
 
   const handlePickImage = async () => {
@@ -109,22 +120,21 @@ export default function CadastroLivroScreen() {
         </TouchableOpacity>
 
         <TextInput
-          style={styles.input}
-          placeholder="ISBN"
-          value={isbn}
-          onChangeText={setIsbn}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Titulo"
+          style={[
+            styles.input,
+            isSubmitted && !nomeLivro ? stylesGlobal.errorInput : null,
+          ]}
+          placeholder="Titulo*"
           value={nomeLivro}
           onChangeText={setNomeLivro}
         />
 
         <TextInput
-          style={styles.input}
-          placeholder="Categoria"
+          style={[
+            styles.input,
+            isSubmitted && !categoria ? stylesGlobal.errorInput : null,
+          ]}
+          placeholder="Categoria*"
           value={categoria}
           onChangeText={setCategoria}
         />
@@ -136,12 +146,20 @@ export default function CadastroLivroScreen() {
           onChangeText={setAutor}
         />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Condição"
-          value={condicao}
-          onChangeText={setCondicao}
-        />
+        {/* Tem que arrumar o estilo */}
+        <Picker
+          selectedValue={condicao}
+          onValueChange={(itemValue) => setCondicao(itemValue)}
+          style={[
+            styles.input,
+            isSubmitted && !condicao ? stylesGlobal.errorInput : null,
+          ]}
+        >
+          <Picker.Item label="Selecione a Condição*" value="" />
+          <Picker.Item label="Novo" value="novo" />
+          <Picker.Item label="Usado" value="usado" />
+          <Picker.Item label="Avariado" value="avariado" />
+        </Picker>
 
         <TextInput
           style={[styles.input, styles.textArea]}

@@ -8,8 +8,10 @@ const globalStyles = StyleSheet.create({
     right: 0,
     zIndex: 1,
   },
-
-  // Adicione outros estilos globais aqui
+  errorInput: {
+    borderColor: "red",
+    borderWidth: 1,
+  },
 });
 
 export default globalStyles;
