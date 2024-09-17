@@ -34,14 +34,16 @@ export default function HomeScreen() {
           <BarraDePesquisa onResultadosPesquisa={handleResultadosPesquisa} />
           <Banner />
         </View>
-        {/* mudar para sugestoes  */}
-        <Section
-          name="Livros sugeridos"
-          label="Veja mais"
-          action={() => console.log("CLICOU NO VEJA MAIS DO Sugeridos")}
-          size="text-2xl"
-        />
-        <LivrosSugeridos />
+        {/* Só mostra as seções de Livros sugeridos e Anúncios se não houver resultados de pesquisa */}
+        {!resultadosPesquisa && (
+          <>
+            <Section
+              name="Livros sugeridos"
+              label="Veja mais"
+              action={() => console.log("CLICOU NO VEJA MAIS DO Sugeridos")}
+              size="text-2xl"
+            />
+            <LivrosSugeridos />
 
             <Section
               name="Anúncios"
