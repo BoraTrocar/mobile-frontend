@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 12,
-    elevation: 0, // Remove a elevação do Card para o estilo wrapper
+    elevation: 0,
     backgroundColor: "white",
     height: 300,
   },

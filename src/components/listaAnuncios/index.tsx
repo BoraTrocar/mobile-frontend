@@ -1,43 +1,50 @@
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { LivroProps } from "../../models/LivroProps";
 import { RootStackParamList } from "../../navigation/AppNavigator";
-import { ApiService } from "../../services/api.service";
+import LivroService from "../../services/livro.service";
 import { AnuncioItem } from "./item";
 
-export function AnunciostListaVertical() {
+interface AnunciostListaVerticalProps {
+  resultadosPesquisa: LivroProps[] | null;
+}
+
+export function AnunciostListaVertical({
+  resultadosPesquisa,
+}: AnunciostListaVerticalProps) {
   const [anuncios, setAnuncios] = useState<LivroProps[]>([]);
-  const apiService = new ApiService();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-  // tem q ir para o service essa func busca os anúncios
   const getAnuncios = async () => {
     try {
-      const data = await apiService.get("/livro/all");
+      const data = await LivroService.obterTodosOsLivros();
       setAnuncios(data);
     } catch (error) {
       console.error("Erro ao buscar anúncios:", error);
     }
   };
 
-  //Gambiarra para atualizar o componente 
+  //Sempre que a tela ganha foco e não há nada na pesquisa ele vai dar um get em todos os livros
   useFocusEffect(
     useCallback(() => {
-      getAnuncios(); // Vai mandar a request sempre o componente for chamado (em tese)
-    }, [])
+      if (!resultadosPesquisa) {
+        getAnuncios();
+      }
+    }, [resultadosPesquisa])
   );
 
   const handlePress = (item: LivroProps) => {
     navigation.navigate("DetalhesDoLivroScreen", { livro: item });
   };
 
+  const livrosParaExibir = resultadosPesquisa || anuncios;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.grid}>
-        {anuncios.map((item) => (
+        {livrosParaExibir.map((item) => (
           <View key={item.idLivro.toString()} style={styles.itemContainer}>
             <AnuncioItem item={item} onPress={handlePress} />
           </View>
@@ -51,6 +58,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 8,
     paddingVertical: 16,
+    marginBottom: 50,
   },
   grid: {
     flexDirection: "row",
