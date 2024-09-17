@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Button, Text } from "react-native-paper";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   label: string;
   action: () => void;
   textColor?: string;
-  labelColor?: string; // Adicionado para definir a cor do rótulo
+  labelColor?: string;
 }
 
 export function Section({
@@ -17,7 +17,7 @@ export function Section({
   label,
   action,
   textColor = "#000",
-  labelColor = "#000", // Valor padrão para a cor do rótulo
+  labelColor = "#000",
 }: Props) {
   return (
     <View style={styles.container}>
@@ -32,11 +32,7 @@ export function Section({
       >
         {name}
       </Text>
-      <Button
-        mode="text"
-        onPress={action}
-        labelStyle={{ color: labelColor }} // Definindo a cor do rótulo
-      >
+      <Button mode="text" onPress={action} labelStyle={{ color: labelColor }}>
         {label}
       </Button>
     </View>

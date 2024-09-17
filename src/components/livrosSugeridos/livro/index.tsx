@@ -26,27 +26,27 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     elevation: 4,
     backgroundColor: "white",
-    width: 150, // Ajuste o tamanho conforme necessário
-    height: 270, // Ajuste o tamanho conforme necessário
+    width: 150,
+    height: 270,
   },
   cover: {
     borderRadius: 12,
-    height: 145, // Ajuste a altura da imagem conforme necessário
+    height: 145,
   },
   content: {
     backgroundColor: "white",
-    padding: 8, // Ajuste o padding conforme necessário
+    padding: 8,
   },
   title: {
     color: "green",
-    fontSize: 16, // Ajuste o tamanho da fonte conforme necessário
+    fontSize: 16,
   },
   author: {
     color: "#000",
-    fontSize: 14, // Ajuste o tamanho da fonte conforme necessário
+    fontSize: 14,
   },
   advertiser: {
     color: "#6e6e6e",
-    fontSize: 12, // Ajuste o tamanho da fonte conforme necessário
+    fontSize: 12,
   },
 });

@@ -4,7 +4,7 @@ import { LivroProps } from "../../models/LivroProps";
 import { ApiService } from "../../services/api.service";
 import { CardHorizontallivro } from "./livro";
 
-export function LivrosDestaque() {
+export function LivrosSugeridos() {
   const [livros, setLivros] = useState<LivroProps[]>([]);
   const apiService = new ApiService();
 

@@ -109,7 +109,7 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("nomeUsuario")}
-            placeholder="Nome de Usuário"
+            placeholder="Nome de Usuário*"
             value={nomeUsuario}
             onChangeText={(text) => {
               setNomeUsuario(text);
@@ -119,7 +119,7 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("email")}
-            placeholder="E-mail"
+            placeholder="E-mail*"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
@@ -131,7 +131,7 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("nickname")}
-            placeholder="Nickname"
+            placeholder="Nickname*"
             value={nickname}
             onChangeText={(text) => {
               setNickname(text);
@@ -141,7 +141,7 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("senha")}
-            placeholder="Senha"
+            placeholder="Senha*"
             secureTextEntry
             value={senha}
             onChangeText={(text) => {
@@ -152,7 +152,7 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("dataNascimento")}
-            placeholder="Data de Nascimento"
+            placeholder="Data de Nascimento*"
             value={dataNascimento}
             onChangeText={(text) => {
               setDataNascimento(text);

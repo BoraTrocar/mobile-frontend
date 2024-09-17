@@ -7,7 +7,7 @@ import { Banner } from "../components/banner";
 import { BarraDePesquisa } from "../components/barraDePesquisa";
 import { Header } from "../components/header";
 import { AnunciostListaVertical } from "../components/listaAnuncios";
-import { LivrosDestaque } from "../components/livrosDestaque";
+import { LivrosSugeridos } from "../components/livrosSugeridos";
 import { HorizontalMenu } from "../components/menu";
 import { Section } from "../components/section";
 import styles from "../styles/HomeScreenStyles";
@@ -26,14 +26,14 @@ export default function HomeScreen() {
           <BarraDePesquisa />
           <Banner />
         </View>
-
+        {/* mudar para sugestoes  */}
         <Section
-          name="Livros em destaque"
+          name="Livros sugeridos"
           label="Veja mais"
-          action={() => console.log("CLICOU NO VEJA MAIS DO DESTAQUE")}
+          action={() => console.log("CLICOU NO VEJA MAIS DO Sugeridos")}
           size="text-2xl"
         />
-        <LivrosDestaque />
+        <LivrosSugeridos />
 
         <Section
           name="Anúncios"
