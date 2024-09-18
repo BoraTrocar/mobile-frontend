@@ -1,5 +1,5 @@
 export interface LivroProps {
-  idLivro: number;
+  idLivro: string;
   nomeLivro: string;
   isbn: string;
   categoria: string;

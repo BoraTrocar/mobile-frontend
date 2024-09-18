@@ -120,6 +120,13 @@ export default function CadastroLivroScreen() {
         </TouchableOpacity>
 
         <TextInput
+          style={[styles.input]}
+          placeholder="ISBN"
+          value={isbn}
+          onChangeText={setIsbn}
+        />
+
+        <TextInput
           style={[
             styles.input,
             isSubmitted && !nomeLivro ? stylesGlobal.errorInput : null,

@@ -14,12 +14,13 @@ const styles = StyleSheet.create({
   },
   card: {
     marginHorizontal: 16,
-    marginTop: 24,
-    padding: 50,
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     backgroundColor: "#FFFFFF",
     elevation: 4,
     borderRadius: 16,
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
   },
   cardContent: {
@@ -52,7 +53,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#4eb3de",
   },
   cadastrarButton: {
-    width: "100%",
+    width: "80%",
+    alignSelf: "center",
     height: 50,
     backgroundColor: "#2196F3",
     borderRadius: 8,
@@ -64,6 +66,22 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  livrosContainer: {
+    marginTop: 20,
+    width: "100%",
+    alignSelf: "center",
+    maxHeight: 300,
+  },
+  livroCard: {
+    backgroundColor: "#fff",
+    marginBottom: 10,
+    width: "100%",
+  },
+  livroTitulo: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#000",
   },
 });
 

@@ -1,6 +1,6 @@
-import { getToken } from "../token/tokenStorage"; // Importe o serviço de token
 import axios from "axios";
 import { environment } from "../environments/environments";
+import { getToken } from "../token/tokenStorage"; // Importe o serviço de token
 
 interface Headers {
   [key: string]: string;
@@ -68,6 +68,33 @@ export class ApiService {
       }
 
       console.error("Erro ao fazer a requisição POST:", errorMessage);
+      throw new Error(errorMessage);
+    }
+  }
+
+  async delete(endpoint: string, headers?: Headers) {
+    try {
+      const authHeaders = await this.getAuthHeaders();
+      const url = `${this.URL}${endpoint}`;
+
+      const response = await axios.delete(url, {
+        headers: {
+          ...authHeaders,
+          ...headers,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      let errorMessage = "Erro inesperado";
+
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Erro ao fazer a requisição DELETE:", errorMessage);
       throw new Error(errorMessage);
     }
   }

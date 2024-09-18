@@ -1,3 +1,5 @@
+import { LivroProps } from "./LivroProps";
+
 export interface Usuario {
   nomeCompleto: string;
   email: string;
@@ -5,5 +7,5 @@ export interface Usuario {
   nickname: string;
   tipoConta: string;
   fotoPerfil: string;
-  anunciosPostados: object;
+  anunciosPostados: LivroProps[]; // Lista de livros
 }

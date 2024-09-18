@@ -42,6 +42,11 @@ class LivroService extends ApiService {
   async obterTodosOsLivros() {
     return this.get("/livro/all");
   }
+
+  // Deletar livro
+  async deletarLivro(idLivro: string) {
+    return this.delete(`/livro/deletar/${idLivro}`);
+  }
 }
 
 export default new LivroService();

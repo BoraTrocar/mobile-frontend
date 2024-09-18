@@ -1,16 +1,18 @@
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { Button, Card, Text } from "react-native-paper";
 import { Header } from "../components/header";
+import { LivroPerfilCard } from "../components/livroPerfilCard"; // Corrija o caminho se necessário
+import { HorizontalMenu } from "../components/menu";
+import { LivroProps } from "../models/LivroProps";
+import { Usuario } from "../models/Usuario";
 import { RootStackParamList } from "../navigation/AppNavigator";
+import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/PerfilScreenStyles";
 import globalStyles from "../styles/globalStyles";
 import { getToken, removeToken } from "../token/tokenStorage";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
-import { Button, Card, Text } from "react-native-paper";
-import { HorizontalMenu } from "../components/menu";
-import { Usuario } from "../models/Usuario";
-import { UsuarioService } from "../services/usuario.service";
 
 type PerfilScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -77,28 +79,42 @@ export function PerfilScreen() {
   return (
     <View style={styles.container}>
       <Header />
-      <Button
-        mode="contained"
-        style={styles.logoutButton}
-        onPress={handleLogout}
-        icon="logout"
-      >
-        Sair
-      </Button>
       <Card style={styles.card}>
+        <Button
+          mode="contained"
+          style={styles.logoutButton}
+          onPress={handleLogout}
+          icon="logout"
+          children={undefined}
+        />
         <View style={styles.cardContent}>
           <Image source={{ uri: usuario.fotoPerfil }} style={styles.avatar} />
           <Text style={styles.name}>{usuario.nomeCompleto}</Text>
           <Text style={styles.email}>{usuario.email}</Text>
           <Text style={styles.accountType}>{usuario.tipoConta}</Text>
         </View>
+        <ScrollView
+          style={styles.livrosContainer}
+          showsVerticalScrollIndicator={true}
+        >
+          {usuario.anunciosPostados.length > 0 ? (
+            usuario.anunciosPostados.map((livro) => (
+              <LivroPerfilCard
+                key={livro.idLivro}
+                livro={livro as LivroProps}
+              />
+            ))
+          ) : (
+            <Text>Nenhum livro postado</Text>
+          )}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.cadastrarButton}
+          onPress={goToCadastrarLivro}
+        >
+          <Text style={styles.buttonText}>Cadastrar Livro</Text>
+        </TouchableOpacity>
       </Card>
-      <TouchableOpacity
-        style={styles.cadastrarButton}
-        onPress={goToCadastrarLivro}
-      >
-        <Text style={styles.buttonText}>Cadastrar Livro</Text>
-      </TouchableOpacity>
       <View style={globalStyles.fixedMenu}>
         <HorizontalMenu />
       </View>
