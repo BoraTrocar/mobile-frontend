@@ -13,7 +13,8 @@ import { useTheme } from "react-native-paper";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/LoginScreenStyles";
-import { setToken } from '../token/tokenStorage'; // Importa a função para salvar o token
+import { removeToken, setToken } from "../token/tokenStorage"; // Importa a função para salvar o token
+import { useAuth } from "../hooks/useAuth";
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -27,6 +28,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // Estado para a mensagem de erro
+  const { isAutenticado } = useAuth();
 
   const usuarioService = new UsuarioService();
 
@@ -43,9 +45,15 @@ export default function LoginScreen() {
       setErrorMessage("Falha no login. Verifique suas credenciais."); // Define a mensagem de erro
     }
   };
+
   const handleContinueSemLogin = () => {
+    if (isAutenticado) {
+      removeToken();
+      navigation.navigate("Home");
+    }
     navigation.navigate("Home");
   };
+  
   const handleCadastroUsuario = () => {
     navigation.navigate("CadastroUsuario");
   };
