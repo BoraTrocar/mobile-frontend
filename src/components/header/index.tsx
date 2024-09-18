@@ -1,14 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Constants from "expo-constants";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { IconButton, useTheme } from "react-native-paper";
 import { useLocation } from "../../../LocationContext";
-import { Usuario } from "../../models/Usuario";
 import { RootStackParamList } from "../../navigation/AppNavigator";
-import { UsuarioService } from "../../services/usuario.service";
-import { getToken } from "../../token/tokenStorage";
+import { useAuth } from "../../hooks/useAuth";
 
 type HeaderNavigationProp = StackNavigationProp<RootStackParamList, "Perfil">;
 
@@ -17,30 +15,13 @@ export function Header() {
   const statusBarHeight = Constants.statusBarHeight;
   const navigation = useNavigation<HeaderNavigationProp>();
   const { cidade, atualizaLocalizacao } = useLocation();
-  const [usuario, setUsuario] = useState<Usuario | null>(null);
-
-  useEffect(() => {
-    async function fetchUsuario() {
-      try {
-        const token = await getToken();
-        if (!token) {
-          throw new Error("Token não encontrado");
-        }
-
-        const usuarioService = new UsuarioService();
-        const data = await usuarioService.perfilUsuario(token);
-        setUsuario(data);
-      } catch (error) {
-        console.error("Erro ao buscar usuário:", error);
-      }
-    }
-
-    fetchUsuario();
-  }, []);
+  const { isAutenticado, usuario } = useAuth();
 
   const handleUserPress = () => {
-    if (usuario) {
+    if (isAutenticado) {
       navigation.navigate("Perfil");
+    } else {
+      navigation.navigate("Login");
     }
   };
 
@@ -51,15 +32,17 @@ export function Header() {
         <IconButton
           icon="map-marker"
           size={20}
-          onPress={atualizaLocalizacao} // Atualizando a localização ao clicar
+          onPress={atualizaLocalizacao}
           iconColor={colors.primary}
         />
       </View>
-      {usuario && (
-        <TouchableOpacity onPress={handleUserPress}>
+      <TouchableOpacity onPress={handleUserPress}>
+        {isAutenticado && usuario ? (
           <Text style={styles.userName}>{usuario.nomeCompleto}</Text>
-        </TouchableOpacity>
-      )}
+        ) : (
+          <Text style={styles.loginText}>Entrar</Text>
+        )}
+      </TouchableOpacity>
     </View>
   );
 }
@@ -83,5 +66,9 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 18,
     color: "gray",
+  },
+  loginText: {
+    fontSize: 18,
+    color: "blue",
   },
 });

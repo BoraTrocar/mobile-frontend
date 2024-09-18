@@ -19,7 +19,7 @@ type PerfilScreenNavigationProp = StackNavigationProp<
 
 export function PerfilScreen() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [carregando, setCarregando] = useState(true);
   const usuarioService = new UsuarioService();
   const navigation = useNavigation<PerfilScreenNavigationProp>();
 
@@ -38,7 +38,7 @@ export function PerfilScreen() {
       } catch (error) {
         console.error("Erro ao buscar usuário:", error);
       } finally {
-        setLoading(false); // Atualize o estado de carregamento
+        setCarregando(false); // Atualize o estado de carregamento
       }
     }
     fetchUsuario();
@@ -58,7 +58,7 @@ export function PerfilScreen() {
     navigation.navigate("CadastroLivro");
   };
 
-  if (loading) {
+  if (carregando) {
     return (
       <View style={styles.centered}>
         <Text>Carregando...</Text>
