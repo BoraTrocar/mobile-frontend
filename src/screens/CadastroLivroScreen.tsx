@@ -36,14 +36,17 @@ export default function CadastroLivroScreen() {
 
   const handleCadastrar = async () => {
     setIsSubmitted(true);
-    //Acho que eu devo criar um arquivo global para tratar todos os forms
+
     if (!nomeLivro || !categoria || !condicao) {
       Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    if (isbn.length !== 13) {
-      Alert.alert("Erro", "O ISBN deve ter exatamente 13 dígitos.");
+    if (isbn && (isbn.length < 7 || isbn.length > 13)) {
+      Alert.alert(
+        "Erro",
+        "O ISBN deve ter entre 7 e 13 dígitos, se for preenchido."
+      );
       return;
     }
 
