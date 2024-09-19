@@ -97,6 +97,12 @@ export default function CadastroUsuarioScreen() {
       : styles.input;
   };
 
+  const handleNomeUsuarioChange = (text: string) => {
+    const lettersOnly = text.replace(/[^a-zA-Z]/g, "");
+    setNomeUsuario(lettersOnly.slice(0, 40));
+    setErrorFields((prev) => prev.filter((f) => f !== "nomeUsuario"));
+  };
+
   return (
     /* Depois tem que ver para transformar cada input um componente ou algo assim */
     <View style={styles.container}>
@@ -109,12 +115,10 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("nomeUsuario")}
-            placeholder="Nome de Usuário*"
+            placeholder="Nome de Usuário* (max. 50)"
             value={nomeUsuario}
-            onChangeText={(text) => {
-              setNomeUsuario(text);
-              setErrorFields((prev) => prev.filter((f) => f !== "nomeUsuario"));
-            }}
+            onChangeText={handleNomeUsuarioChange}
+            maxLength={50}
           />
 
           <TextInput
@@ -124,36 +128,40 @@ export default function CadastroUsuarioScreen() {
             autoCapitalize="none"
             value={email}
             onChangeText={(text) => {
-              setEmail(text);
+              setEmail(text.slice(0, 85));
               setErrorFields((prev) => prev.filter((f) => f !== "email"));
             }}
+            maxLength={100}
           />
 
           <TextInput
             style={getInputStyle("nickname")}
-            placeholder="Nickname*"
+            placeholder="Nickname* (máx. 30)"
             value={nickname}
             onChangeText={(text) => {
-              setNickname(text);
+              setNickname(text.slice(0, 30));
               setErrorFields((prev) => prev.filter((f) => f !== "nickname"));
             }}
+            maxLength={30}
           />
 
           <TextInput
             style={getInputStyle("senha")}
-            placeholder="Senha*"
+            placeholder="Senha* (min. 5)"
             secureTextEntry
             value={senha}
             onChangeText={(text) => {
-              setSenha(text);
+              setSenha(text.slice(0, 50));
               setErrorFields((prev) => prev.filter((f) => f !== "senha"));
             }}
+            maxLength={50}
           />
 
           <TextInput
             style={getInputStyle("dataNascimento")}
             placeholder="Data de Nascimento*"
             value={dataNascimento}
+            keyboardType="numeric"
             onChangeText={(text) => {
               setDataNascimento(text);
               setErrorFields((prev) =>

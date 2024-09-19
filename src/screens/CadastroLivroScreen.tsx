@@ -10,7 +10,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useTheme } from "react-native-paper";
+import {
+  useTheme,
+  IconButton,
+  Dialog,
+  Portal,
+  Button,
+} from "react-native-paper";
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 import stylesGlobal from "../styles/globalStyles";
@@ -24,6 +30,7 @@ export default function CadastroLivroScreen() {
   const [condicao, setCondicao] = useState("");
   const [descricao, setDescricao] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isbnHelpVisible, setIsbnHelpVisible] = useState(false);
 
   const { colors } = useTheme();
 
@@ -32,6 +39,11 @@ export default function CadastroLivroScreen() {
     //Acho que eu devo criar um arquivo global para tratar todos os forms
     if (!nomeLivro || !categoria || !condicao) {
       Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    if (isbn.length !== 13) {
+      Alert.alert("Erro", "O ISBN deve ter exatamente 13 dígitos.");
       return;
     }
 
@@ -105,6 +117,23 @@ export default function CadastroLivroScreen() {
     ]);
   };
 
+  const handleIsbnChange = (text: string) => {
+    const numericValue = text.replace(/[^0-9]/g, "");
+    setIsbn(numericValue.slice(0, 13));
+  };
+
+  const handleTextInputChange = (
+    text: string,
+    setter: React.Dispatch<React.SetStateAction<string>>,
+    maxLength: number
+  ) => {
+    const textOnly = text.replace(/[^a-zA-Z\s]/g, "");
+    setter(textOnly.slice(0, maxLength));
+  };
+
+  const mostraIsbnAjuda = () => setIsbnHelpVisible(true);
+  const hideIsbnHelp = () => setIsbnHelpVisible(false);
+
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.innerContainer}>
@@ -118,22 +147,32 @@ export default function CadastroLivroScreen() {
             style={styles.image}
           />
         </TouchableOpacity>
-
-        <TextInput
-          style={[styles.input]}
-          placeholder="ISBN"
-          value={isbn}
-          onChangeText={setIsbn}
-        />
+        <View style={styles.isbnContainer}>
+          <TextInput
+            style={[styles.input, styles.isbnInput]}
+            placeholder="ISBN"
+            value={isbn}
+            onChangeText={handleIsbnChange}
+            keyboardType="numeric"
+            maxLength={13}
+          />
+          <IconButton
+            icon="help-circle-outline"
+            size={20}
+            onPress={mostraIsbnAjuda}
+            style={styles.iconButton}
+          />
+        </View>
 
         <TextInput
           style={[
             styles.input,
             isSubmitted && !nomeLivro ? stylesGlobal.errorInput : null,
           ]}
-          placeholder="Titulo*"
+          placeholder="Título* "
           value={nomeLivro}
           onChangeText={setNomeLivro}
+          maxLength={50}
         />
 
         <TextInput
@@ -143,14 +182,16 @@ export default function CadastroLivroScreen() {
           ]}
           placeholder="Categoria*"
           value={categoria}
-          onChangeText={setCategoria}
+          onChangeText={(text) => handleTextInputChange(text, setCategoria, 50)}
+          maxLength={30}
         />
 
         <TextInput
           style={styles.input}
           placeholder="Autor"
           value={autor}
-          onChangeText={setAutor}
+          onChangeText={(text) => handleTextInputChange(text, setAutor, 50)}
+          maxLength={50}
         />
 
         {/* Tem que arrumar o estilo */}
@@ -170,10 +211,11 @@ export default function CadastroLivroScreen() {
 
         <TextInput
           style={[styles.input, styles.textArea]}
-          placeholder="Descrição"
+          placeholder="Descrição (máx. 500 caracteres)"
           value={descricao}
           onChangeText={setDescricao}
           multiline
+          maxLength={500}
         />
 
         <TouchableOpacity
@@ -189,6 +231,35 @@ export default function CadastroLivroScreen() {
         >
           <Text style={styles.buttonText}>Limpar</Text>
         </TouchableOpacity>
+
+        <Portal>
+          <Dialog
+            style={styles.dialogAjuda}
+            visible={isbnHelpVisible}
+            onDismiss={hideIsbnHelp}
+          >
+            <Dialog.Title style={styles.tituloDialog}>
+              O que é ISBN?
+            </Dialog.Title>
+            <Dialog.Content>
+              <Text>
+                ISBN significa "International Standard Book Number". É um número
+                único de 13 dígitos usado para identificar livros e outros tipos
+                de publicações. Cada ISBN é único para um livro específico e
+                ajuda na organização e busca de livros em todo o mundo.
+              </Text>
+            </Dialog.Content>
+            <Dialog.Title style={styles.tituloDialog}>
+              Onde encontra-lo?
+            </Dialog.Title>
+            <Dialog.Content>
+              <Text>Atras do seu livro proximo ao codigo de barras!</Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={hideIsbnHelp}>Entendi</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </View>
     </ScrollView>
   );

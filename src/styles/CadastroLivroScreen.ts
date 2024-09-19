@@ -78,6 +78,34 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20,
   },
+
+  /* OBRA DE ARTE ISSO AQUI */
+  isbnContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    backgroundColor: "#fff",
+    marginBottom: 12,
+  },
+  isbnInput: {
+    flex: 1,
+    marginBottom: 0,
+    paddingHorizontal: 16,
+    backgroundColor: "transparent",
+    borderColor: "#fff",
+  },
+  iconButton: {
+    padding: 0,
+  },
+  dialogAjuda: {
+    backgroundColor: "#fff",
+  },
+  tituloDialog: {
+    color: "#000",
+    marginBottom: 5,
+  },
 });
 
 export default styles;
