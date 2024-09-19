@@ -12,6 +12,7 @@ import {
 import { useTheme } from "react-native-paper";
 import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import { RootStackParamList } from "../navigation/AppNavigator";
+import { CepService } from "../services/cep.service";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/CadastroUsuarioScreenStyles";
 import stylesGlobal from "../styles/globalStyles";
@@ -22,6 +23,7 @@ type CadastroUsuarioScreenNavigationProp = StackNavigationProp<
 >;
 
 const usuarioService = new UsuarioService();
+const cepService = new CepService();
 
 export default function CadastroUsuarioScreen() {
   const { colors } = useTheme();
@@ -175,7 +177,10 @@ export default function CadastroUsuarioScreen() {
             placeholder="CEP"
             keyboardType="numeric"
             value={cep}
-            onChangeText={setCep}
+            onChangeText={(text) => {
+              setCep(text);
+              cepService.verificaCEP(text); // Verifica o CEP quando o usuário digitar
+            }}
           />
 
           <TextInput
