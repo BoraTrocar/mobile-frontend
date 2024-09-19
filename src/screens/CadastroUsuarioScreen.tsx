@@ -40,19 +40,30 @@ export default function CadastroUsuarioScreen() {
 
   const [errorFields, setErrorFields] = useState<string[]>([]);
 
+  /* Por enquanto vai ficar assim nao sei fazer melhor nao */
   const handleSignUpPress = async () => {
     const errors = [];
-    if (!nomeUsuario) errors.push("nomeUsuario");
-    if (!email) errors.push("email");
-    if (!nickname) errors.push("nickname");
-    if (!senha) errors.push("senha");
-    if (!dataNascimento) errors.push("dataNascimento");
+    if (!nomeUsuario || nomeUsuario.length < 3) {
+      errors.push("nomeUsuario");
+    }
+    if (!email || email.length < 5) {
+      errors.push("email");
+    }
+    if (!nickname || nickname.length < 3) {
+      errors.push("nickname");
+    }
+    if (!senha || senha.length < 5) {
+      errors.push("senha");
+    }
+    if (!dataNascimento) {
+      errors.push("dataNascimento");
+    }
 
     if (errors.length > 0) {
       setErrorFields(errors);
       Alert.alert(
         "Campos obrigatórios",
-        "Por favor, preencha todos os campos obrigatórios."
+        "Por favor, preencha todos os campos obrigatórios com os requisitos mínimos."
       );
       return;
     }
