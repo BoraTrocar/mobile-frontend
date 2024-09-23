@@ -83,6 +83,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
   },
+  vazio: {
+    textAlign: "center",
+    color: "#000",
+  },
+  settingsMenu: {
+    position: "absolute",
+    right: 1,
+    zIndex: 1,
+  },
+  teste: {
+    marginTop: 80,
+  },
 });
 
 export default styles;
