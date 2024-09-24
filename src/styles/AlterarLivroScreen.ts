@@ -33,13 +33,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd", // Borda cinza
   },
-  imageUrlInput: {
-    display: "none", // Campo URL da imagem fica escondido
-  },
-  textArea: {
-    height: 100, // Maior altura para textarea
-    textAlignVertical: "top",
-  },
   button: {
     width: "100%",
     height: 50,
@@ -48,61 +41,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
-  cadastrarButton: {
-    backgroundColor: "#2196F3", // Cor do botão "Cadastrar"
-  },
-  limparButton: {
-    backgroundColor: "#f44336", // Cor do botão "Limpar"
+  salvarAlteracaoButton: {
+    backgroundColor: "#2196F3",
+    width: "100%",
+    height: 50,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold", // Texto dos botões
-  },
-  imagePickerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginBottom: 20,
-  },
-  imagePickerButton: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  cameraButton: {
-    backgroundColor: "#FF5722", // Cor diferente para o botão da câmera
-  },
-  image: {
-    width: 150,
-    height: 170,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  isbnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    backgroundColor: "#fff",
-    marginBottom: 12,
-  },
-  isbnInput: {
-    flex: 1,
-    marginBottom: 0,
-    paddingHorizontal: 16,
-    backgroundColor: "transparent",
-    borderColor: "#fff",
-  },
-  iconButton: {
-    padding: 0,
-  },
-  dialogAjuda: {
-    backgroundColor: "#fff",
-  },
-  tituloDialog: {
-    color: "#000",
-    marginBottom: 5,
   },
 });
 

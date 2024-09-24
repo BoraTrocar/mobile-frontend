@@ -24,6 +24,11 @@ type AlteraLivroScreenNavigationProp = StackNavigationProp<
   "DetalhesDoLivroScreen"
 >;
 
+type PerfilScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Perfil"
+>;
+
 //Ta com erro que os campos AUTOR e CATEGORIA nao carregam
 
 export default function AlteraLivroScreen() {
@@ -140,12 +145,15 @@ export default function AlteraLivroScreen() {
             onChangeText={setImage}
           /> */}
 
-          <TouchableOpacity style={styles.button} onPress={handleUpdatePress}>
+          <TouchableOpacity
+            style={styles.salvarAlteracaoButton}
+            onPress={handleUpdatePress}
+          >
             <Text style={styles.buttonText}>Salvar Alterações</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity>
-            <Text>Voltar para Detalhes</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
+            <Text>Voltar para perfil</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
