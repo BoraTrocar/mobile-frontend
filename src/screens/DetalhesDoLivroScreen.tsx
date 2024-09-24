@@ -1,23 +1,31 @@
-import { RootStackParamList } from "../navigation/AppNavigator";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Button, Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
-import globalStyles from "../styles/globalStyles";
+import { LivroProps } from "../models/LivroProps";
 import styles from "../styles/DetalhesDoLivroScreenStyles";
-import { Header } from "../components/header";
+import globalStyles from "../styles/globalStyles";
 
+export type RootStackParamList = {
+  DetalhesDoLivroScreen: { livro: LivroProps }; // Tipo do livro
+  Chat: { bookId: string; ownerUserId: string }; // Parâmetros esperados para a tela de chat
+};
+
+// Definição da rota para a tela de detalhes do livro
 type DetalhesDoLivroScreenRouteProp = RouteProp<
   RootStackParamList,
   "DetalhesDoLivroScreen"
 >;
+
+// Definição da navegação para a tela de detalhes do livro
 type DetalhesDoLivroScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "DetalhesDoLivroScreen"
 >;
 
+// Definindo os tipos de propriedades para o componente
 type Props = {
   route: DetalhesDoLivroScreenRouteProp;
   navigation: DetalhesDoLivroScreenNavigationProp;
@@ -28,7 +36,6 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      {/*  <Header /> */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.cardContainer}>
           <Card style={styles.largeCard}>
@@ -63,7 +70,12 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
               style={styles.button}
               contentStyle={styles.buttonContent}
               labelStyle={styles.buttonLabel}
-              onPress={() => navigation.navigate("Chat")}
+              onPress={() =>
+                navigation.navigate("Chat", {
+                  bookId: livro.idLivro,
+                  ownerUserId: livro.usuario,
+                })
+              }
             >
               Chat
             </Button>
