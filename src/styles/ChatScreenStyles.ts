@@ -13,6 +13,18 @@ const styles = StyleSheet.create({
   },
   messageCard: {
     marginBottom: 8,
+    padding: 8,
+    borderRadius: 10,
+    maxWidth: "90%",
+    alignSelf: "flex-start",
+    backgroundColor: "#DCF8C6",
+  },
+  txtMsgTitle: {
+    color: "black",
+    fontWeight: "800",
+  },
+  txtMsg: {
+    color: "black",
   },
   noMessagesText: {
     color: "#9E9E9E",
@@ -22,7 +34,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 2,
+    padding: 5,
     borderTopWidth: 1,
     borderTopColor: "#E0E0E0",
     backgroundColor: "#FFFFFF",
@@ -31,15 +43,25 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     marginRight: 8,
+    borderRadius: 25,
     backgroundColor: "#FFFFFF",
+    borderColor: "#E0E0E0",
+    borderWidth: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+    height: 40,
+  },
+  textInputFocused: {
+    borderColor: "#4eb3de", // Cor da borda quando em foco
+    backgroundColor: "#F0F8FF", // Cor de fundo mais clara ao focar
   },
 
   //ESTA MERDA DE REACT NATIVE É UM LIXO E NAO DA PARA FAZER UMA CARALHA DE BOTAO DIREITO
   sendButton: {
     backgroundColor: "#4eb3de",
-
+    borderRadius: 25,
     height: 40,
-    width: 20,
+    width: 40,
     justifyContent: "center",
     alignItems: "center",
   },
