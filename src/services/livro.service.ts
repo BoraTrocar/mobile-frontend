@@ -47,6 +47,25 @@ class LivroService extends ApiService {
   async deletarLivro(idLivro: string) {
     return this.delete(`/livro/deletar/${idLivro}`);
   }
+
+  // Alterar Livro
+  async alterarLivro(
+    idLivro: string,
+    data: {
+      isbn: string;
+      nomeLivro: string;
+      categoria: string;
+      autor: string;
+      condicao: string;
+      descricao: string;
+    }
+  ) {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    return this.put(`/livro/alterar/${idLivro}`, JSON.stringify(data), headers);
+  }
 }
 
 export default new LivroService();

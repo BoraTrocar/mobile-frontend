@@ -1,20 +1,25 @@
 import React from "react";
 import { Alert, TouchableOpacity } from "react-native";
 import { Card, Text } from "react-native-paper";
-import { LivroProps } from "../../models/LivroProps"; // Importar o tipo correto
-import LivroService from "../../services/livro.service"; // Certifique-se de que o caminho está correto
-import styles from "../../styles/PerfilScreenStyles"; // Certifique-se de que os estilos estão corretos
+import { LivroProps } from "../../models/LivroProps";
+import LivroService from "../../services/livro.service";
+import styles from "../../styles/PerfilScreenStyles";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 
 type LivroCardProps = {
   livro: LivroProps;
 };
 
 export const LivroPerfilCard: React.FC<LivroCardProps> = ({ livro }) => {
+  const navigation = useNavigation<NavigationProp<any>>();
+
   const handleCardPress = () => {
     Alert.alert("Ação", "Escolha uma opção", [
       {
         text: "Editar Livro",
-        onPress: () => console.log("Editar Livro"),
+        onPress: () => {
+          navigation.navigate("AlteraLivro", { livro });
+        },
       },
       {
         text: "Excluir Livro",
@@ -34,6 +39,7 @@ export const LivroPerfilCard: React.FC<LivroCardProps> = ({ livro }) => {
                   try {
                     await LivroService.deletarLivro(livro.idLivro);
                     Alert.alert("Sucesso", "Livro excluído com sucesso");
+                    // mano tem que fazer algo para atualizar sózinho o componente dps q excluir o livro
                   } catch (error) {
                     Alert.alert("Erro", "Ocorreu um erro ao excluir o livro");
                     console.error("Erro ao excluir livro:", error);
