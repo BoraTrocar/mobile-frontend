@@ -4,34 +4,34 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3F2FD", // Cor de fundo principal
+    backgroundColor: "#E3F2FD",
   },
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: "center",
     paddingHorizontal: 16,
     paddingVertical: Constants.statusBarHeight + 20,
-    backgroundColor: "#E3F2FD", // Mantendo a mesma cor de fundo
+    backgroundColor: "#E3F2FD",
   },
   innerContainer: {
     width: "100%",
-    alignItems: "center", // Centraliza os componentes
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "#333", // Cor para título
+    color: "#333",
   },
   input: {
     width: "100%",
     height: 50,
-    backgroundColor: "#fff", // Fundo branco para inputs
+    backgroundColor: "#fff",
     borderRadius: 8,
     paddingHorizontal: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#ddd", // Borda cinza
+    borderColor: "#ddd",
   },
   button: {
     width: "100%",
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "bold", // Texto dos botões
+    fontWeight: "bold",
   },
 });
 
