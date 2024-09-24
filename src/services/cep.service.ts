@@ -5,7 +5,7 @@ export class CepService {
 
   async verificaCEP(cep: string) {
     try {
-      const response = await axios.get(`${this.viacepUrl}/${cep}/json`);
+      const response = await axios.get(`${this.viacepUrl}/${cep}/json/`);
 
       if (response.data.erro) {
         return { error: true, message: "CEP não encontrado." };

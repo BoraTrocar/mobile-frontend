@@ -100,6 +100,12 @@ export default function CadastroUsuarioScreen() {
     }
   };
 
+  const handleNomeUsuarioChange = (text: string) => {
+    const lettersAndSpacesOnly = text.replace(/[^a-zA-Z\s]/g, ""); // \s permite espaços
+    setNomeUsuario(lettersAndSpacesOnly.slice(0, 40));
+    setErrorFields((prev) => prev.filter((f) => f !== "nomeUsuario"));
+  };
+
   const handleBackToLogin = () => {
     navigation.navigate("Login");
   };
@@ -110,14 +116,32 @@ export default function CadastroUsuarioScreen() {
       : styles.input;
   };
 
-  const handleNomeUsuarioChange = (text: string) => {
-    const lettersOnly = text.replace(/[^a-zA-Z]/g, "");
-    setNomeUsuario(lettersOnly.slice(0, 40));
-    setErrorFields((prev) => prev.filter((f) => f !== "nomeUsuario"));
+  const handleCepChange = async (text: string) => {
+    setCep(text);
+
+    if (text.length === 8) {
+      try {
+        const endereco = await cepService.verificaCEP(text);
+
+        if (endereco.error) {
+          Alert.alert("Erro", endereco.message);
+          setCidade("");
+          setUf("");
+        } else {
+          setCidade(endereco.localidade || "");
+          setUf(endereco.uf || "");
+        }
+      } catch (error) {
+        Alert.alert("Erro", "Ocorreu um erro ao buscar o CEP.");
+        console.error(error);
+      }
+    } else {
+      setCidade("");
+      setUf("");
+    }
   };
 
   return (
-    /* Depois tem que ver para transformar cada input um componente ou algo assim */
     <View style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
@@ -188,10 +212,7 @@ export default function CadastroUsuarioScreen() {
             placeholder="CEP"
             keyboardType="numeric"
             value={cep}
-            onChangeText={(text) => {
-              setCep(text);
-              cepService.verificaCEP(text); // Verifica o CEP quando o usuário digitar
-            }}
+            onChangeText={handleCepChange} 
           />
 
           <TextInput
