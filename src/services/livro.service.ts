@@ -1,7 +1,7 @@
 import { ApiService } from "./api.service";
+import { uploadImage } from "../../firebaseConfig";
 
 class LivroService extends ApiService {
-  //So deus sabe como esse esquema da img funciona
   async cadastrarLivro(data: {
     img: string | null;
     isbn: string;
@@ -11,6 +11,17 @@ class LivroService extends ApiService {
     condicao: string;
     descricao: string;
   }) {
+    let imageUrl = null;
+
+    if (data.img) {
+      try {
+        imageUrl = await uploadImage(data.img);
+      } catch (error) {
+        console.error("Error uploading image to Firebase:", error);
+        throw new Error("Failed to upload image");
+      }
+    }
+
     const formData = new FormData();
 
     formData.append("isbn", data.isbn);
@@ -20,15 +31,8 @@ class LivroService extends ApiService {
     formData.append("condicao", data.condicao);
     formData.append("descricao", data.descricao);
 
-    if (data.img) {
-      const uriParts = data.img.split(".");
-      const fileType = uriParts[uriParts.length - 1];
-
-      formData.append("img", {
-        uri: data.img,
-        name: `photo.${fileType}`,
-        type: `image/${fileType}`,
-      } as any);
+    if (imageUrl) {
+      formData.append("img", imageUrl);
     }
 
     const headers = {
@@ -52,6 +56,7 @@ class LivroService extends ApiService {
   async alterarLivro(
     idLivro: string,
     data: {
+      img?: string | null;
       isbn: string;
       nomeLivro: string;
       categoria: string;
@@ -60,11 +65,37 @@ class LivroService extends ApiService {
       descricao: string;
     }
   ) {
+    let imageUrl = null;
+
+    if (data.img && data.img.startsWith("file://")) {
+      try {
+        imageUrl = await uploadImage(data.img);
+      } catch (error) {
+        console.error("Error uploading image to Firebase:", error);
+        throw new Error("Failed to upload image");
+      }
+    }
+
+    const formData = new FormData();
+
+    formData.append("isbn", data.isbn);
+    formData.append("nomeLivro", data.nomeLivro);
+    formData.append("categoria", data.categoria);
+    formData.append("autor", data.autor);
+    formData.append("condicao", data.condicao);
+    formData.append("descricao", data.descricao);
+
+    if (imageUrl) {
+      formData.append("img", imageUrl);
+    } else if (data.img) {
+      formData.append("img", data.img);
+    }
+
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     };
 
-    return this.put(`/livro/alterar/${idLivro}`, JSON.stringify(data), headers);
+    return this.put(`/livro/alterar/${idLivro}`, formData, headers);
   }
 }
 

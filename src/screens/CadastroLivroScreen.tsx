@@ -20,6 +20,7 @@ import {
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 import stylesGlobal from "../styles/globalStyles";
+import { uploadImage } from '../../firebaseConfig';
 
 export default function CadastroLivroScreen() {
   const [img, setImg] = useState<string | null>(null);
@@ -34,38 +35,47 @@ export default function CadastroLivroScreen() {
 
   const { colors } = useTheme();
 
-  const handleCadastrar = async () => {
-    setIsSubmitted(true);
 
-    if (!nomeLivro || !categoria || !condicao) {
-      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
-      return;
+
+// In your CadastroLivroScreen component
+const handleCadastrar = async () => {
+  setIsSubmitted(true);
+
+  if (!nomeLivro || !categoria || !condicao) {
+    Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+    return;
+  }
+
+  if (isbn && (isbn.length < 7 || isbn.length > 13)) {
+    Alert.alert(
+      "Erro",
+      "O ISBN deve ter entre 7 e 13 dígitos, se for preenchido."
+    );
+    return;
+  }
+
+  try {
+    let imageUrl = null;
+    if (img) {
+      imageUrl = await uploadImage(img);
     }
 
-    if (isbn && (isbn.length < 7 || isbn.length > 13)) {
-      Alert.alert(
-        "Erro",
-        "O ISBN deve ter entre 7 e 13 dígitos, se for preenchido."
-      );
-      return;
-    }
-
-    try {
-      await LivroService.cadastrarLivro({
-        img,
-        isbn,
-        nomeLivro,
-        categoria,
-        autor,
-        condicao,
-        descricao,
-      });
-      Alert.alert("Sucesso", "Livro cadastrado com sucesso!");
-      handleLimpar(); // Limpa os campos após o cadastro
-    } catch (error) {
-      Alert.alert("Erro", "Não foi possível cadastrar o livro.");
-    }
-  };
+    await LivroService.cadastrarLivro({
+      img: imageUrl, // Use the uploaded image URL
+      isbn,
+      nomeLivro,
+      categoria,
+      autor,
+      condicao,
+      descricao,
+    });
+    Alert.alert("Sucesso", "Livro cadastrado com sucesso!");
+    handleLimpar();
+  } catch (error) {
+    console.error("Error cadastrando livro: ", error);
+    Alert.alert("Erro", "Não foi possível cadastrar o livro.");
+  }
+};
 
   const handleLimpar = () => {
     setImg(null);
