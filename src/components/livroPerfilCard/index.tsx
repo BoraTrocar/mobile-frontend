@@ -37,7 +37,10 @@ export const LivroPerfilCard: React.FC<LivroCardProps> = ({ livro }) => {
                 text: "Excluir",
                 onPress: async () => {
                   try {
-                    await LivroService.deletarLivro(livro.idLivro);
+                    await LivroService.deletarLivro(
+                      livro.idLivro,
+                      livro.imagem
+                    );
                     Alert.alert("Sucesso", "Livro excluído com sucesso");
                     // mano tem que fazer algo para atualizar sózinho o componente dps q excluir o livro
                   } catch (error) {

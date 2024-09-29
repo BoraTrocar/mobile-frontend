@@ -38,5 +38,20 @@ export const uploadImage = async (uri) => {
   }
 };
 
-export { database, storage };
+export const deleteImage = async (imagemUrl) => {
+  if (!imagemUrl) return;
 
+  try {
+    // Obter a referência do arquivo a partir da URL
+    const imagemRef = storageRef(storage, imagemUrl);
+
+    // Deletar o arquivo
+    await deleteObject(imagemRef);
+    console.log("Imagem deletada com sucesso");
+  } catch (error) {
+    console.error("Erro ao deletar a imagem: ", error);
+    throw error;
+  }
+};
+
+export { database, storage };

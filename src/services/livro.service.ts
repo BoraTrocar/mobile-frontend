@@ -1,5 +1,5 @@
 import { ApiService } from "./api.service";
-import { uploadImage } from "../../firebaseConfig";
+import { deleteImage, uploadImage } from "../../firebaseConfig";
 
 class LivroService extends ApiService {
   async cadastrarLivro(data: {
@@ -45,7 +45,10 @@ class LivroService extends ApiService {
   }
 
   // Deletar livro
-  async deletarLivro(idLivro: string) {
+  async deletarLivro(idLivro: string, imagemURL: string) {
+    console.log("passou");
+    await deleteImage(imagemURL);
+
     return this.delete(`/livro/deletar/${idLivro}`);
   }
 
