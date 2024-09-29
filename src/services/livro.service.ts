@@ -3,7 +3,7 @@ import { uploadImage } from "../../firebaseConfig";
 
 class LivroService extends ApiService {
   async cadastrarLivro(data: {
-    img: string | null;
+    imagem: string | null;
     isbn: string;
     nomeLivro: string;
     categoria: string;
@@ -13,33 +13,30 @@ class LivroService extends ApiService {
   }) {
     let imageUrl = null;
 
-    if (data.img) {
+    if (data.imagem) {
       try {
-        imageUrl = await uploadImage(data.img);
+        imageUrl = await uploadImage(data.imagem);
       } catch (error) {
         console.error("Error uploading image to Firebase:", error);
         throw new Error("Failed to upload image");
       }
     }
 
-    const formData = new FormData();
-
-    formData.append("isbn", data.isbn);
-    formData.append("nomeLivro", data.nomeLivro);
-    formData.append("categoria", data.categoria);
-    formData.append("autor", data.autor);
-    formData.append("condicao", data.condicao);
-    formData.append("descricao", data.descricao);
-
-    if (imageUrl) {
-      formData.append("img", imageUrl);
-    }
-
-    const headers = {
-      "Content-Type": "multipart/form-data",
+    const requestData = {
+      isbn: data.isbn,
+      nomeLivro: data.nomeLivro,
+      categoria: data.categoria,
+      autor: data.autor,
+      condicao: data.condicao,
+      descricao: data.descricao,
+      imagem: imageUrl,
     };
 
-    return this.post("/livro/cadastrar", formData, headers);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    return this.post("/livro/cadastrar", requestData, headers);
   }
 
   // Puxa todos os livros
@@ -56,7 +53,7 @@ class LivroService extends ApiService {
   async alterarLivro(
     idLivro: string,
     data: {
-      img?: string | null;
+      imagem?: string | null;
       isbn: string;
       nomeLivro: string;
       categoria: string;
@@ -67,9 +64,9 @@ class LivroService extends ApiService {
   ) {
     let imageUrl = null;
 
-    if (data.img && data.img.startsWith("file://")) {
+    if (data.imagem && data.imagem.startsWith("file://")) {
       try {
-        imageUrl = await uploadImage(data.img);
+        imageUrl = await uploadImage(data.imagem);
       } catch (error) {
         console.error("Error uploading image to Firebase:", error);
         throw new Error("Failed to upload image");
@@ -86,9 +83,9 @@ class LivroService extends ApiService {
     formData.append("descricao", data.descricao);
 
     if (imageUrl) {
-      formData.append("img", imageUrl);
-    } else if (data.img) {
-      formData.append("img", data.img);
+      formData.append("imagem", imageUrl);
+    } else if (data.imagem) {
+      formData.append("imagem", data.imagem);
     }
 
     const headers = {

@@ -61,7 +61,7 @@ const handleCadastrar = async () => {
     }
 
     await LivroService.cadastrarLivro({
-      img: imageUrl, // Use the uploaded image URL
+      imagem: imageUrl, // Use the uploaded image URL
       isbn,
       nomeLivro,
       categoria,

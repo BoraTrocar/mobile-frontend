@@ -12,7 +12,7 @@ export function AnuncioItem({ item, onPress }: Props) {
   return (
     <TouchableOpacity onPress={() => onPress(item)} style={styles.cardWrapper}>
       <Card style={styles.card}>
-        <Card.Cover source={{ uri: item.image }} style={styles.image} />
+        <Card.Cover source={{ uri: item.imagem }} style={styles.image} />
         <Card.Content style={styles.content}>
           <Text style={styles.title} numberOfLines={2}>
             {item.nomeLivro}

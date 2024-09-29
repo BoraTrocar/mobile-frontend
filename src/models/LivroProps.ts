@@ -7,5 +7,5 @@ export interface LivroProps {
   autor: string;
   usuario: string;
   descricao: string;
-  image: string;
+  imagem: string;
 }

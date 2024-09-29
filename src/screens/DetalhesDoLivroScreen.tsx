@@ -43,7 +43,7 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
               <Text variant="headlineLarge" style={styles.title}>
                 {livro.nomeLivro}
               </Text>
-              <Card.Cover source={{ uri: livro.image }} style={styles.image} />
+              <Card.Cover source={{ uri: livro.imagem }} style={styles.image} />
               <Text variant="bodyLarge" style={styles.info}>
                 <Text style={styles.bold}>Autor: </Text>
                 {livro.autor}

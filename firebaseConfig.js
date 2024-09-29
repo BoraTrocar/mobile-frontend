@@ -1,6 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBmH__NnQBHzXIVNzx0AjpqH6SOg_zjW0g",
@@ -20,7 +25,7 @@ const storage = getStorage(app);
 export const uploadImage = async (uri) => {
   const response = await fetch(uri);
   const blob = await response.blob();
-  const filename = uri.substring(uri.lastIndexOf('/') + 1);
+  const filename = uri.substring(uri.lastIndexOf("/") + 1);
   const imageRef = storageRef(storage, `images/${filename}`);
 
   try {
@@ -34,3 +39,4 @@ export const uploadImage = async (uri) => {
 };
 
 export { database, storage };
+
