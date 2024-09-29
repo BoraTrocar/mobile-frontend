@@ -85,7 +85,7 @@ export function PerfilScreen() {
           <NotificacaoSettings onLogout={handleLogout} />
         </View>
         <View style={styles.cardContent}>
-          <Image source={{ uri: usuario.fotoPerfil }} style={styles.avatar} />
+          <Image source={{ uri: usuario.imagemPerfil }} style={styles.avatar} />
           <Text style={styles.name}>{usuario.nomeCompleto}</Text>
           <Text style={styles.email}>{usuario.email}</Text>
           <Text style={styles.accountType}>{usuario.tipoConta}</Text>

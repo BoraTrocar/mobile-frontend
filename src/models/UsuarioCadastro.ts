@@ -1,4 +1,5 @@
 export interface UsuarioCadastro {
+  imagemPerfil:string | null;
   nomeUsuario: string;
   email: string;
   nickname: string;

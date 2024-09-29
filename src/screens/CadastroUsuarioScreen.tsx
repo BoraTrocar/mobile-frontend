@@ -1,8 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
   Alert,
+  Image,
   ScrollView,
   Text,
   TextInput,
@@ -10,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "react-native-paper";
+import { uploadImage } from "../../firebaseConfig";
 import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { CepService } from "../services/cep.service";
@@ -29,6 +32,7 @@ export default function CadastroUsuarioScreen() {
   const { colors } = useTheme();
   const navigation = useNavigation<CadastroUsuarioScreenNavigationProp>();
 
+  const [imagemPerfil, setImagemPerfil] = useState<string | null>(null);
   const [nomeUsuario, setNomeUsuario] = useState("");
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
@@ -39,6 +43,7 @@ export default function CadastroUsuarioScreen() {
   const [uf, setUf] = useState("");
 
   const [errorFields, setErrorFields] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   /* Por enquanto vai ficar assim nao sei fazer melhor nao */
   const handleSignUpPress = async () => {
@@ -68,21 +73,27 @@ export default function CadastroUsuarioScreen() {
       return;
     }
 
-    const newUser: UsuarioCadastro = {
-      nomeUsuario,
-      email,
-      nickname,
-      senha,
-      dataNascimento,
-      cep,
-      cidade,
-      uf,
-    };
-
-    // teste para mostrar oq ta sendo enviado aaaaaaaaaaaaaaaaaaa.
-    //console.log("Dados enviados:", JSON.stringify(newUser, null, 2));
+    setIsLoading(true);
 
     try {
+      let imageUrl = null;
+      if (imagemPerfil) {
+        imageUrl = await uploadImage(imagemPerfil);
+      }
+
+      const newUser: UsuarioCadastro = {
+        imagemPerfil: imageUrl,
+        nomeUsuario,
+        email,
+        nickname,
+        senha,
+        dataNascimento,
+        cep,
+        cidade,
+        uf,
+      };
+
+      //console.log("Dados enviados:", JSON.stringify(newUser, null, 2));
       await usuarioService.cadastrarUsuario(newUser);
       Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
       navigation.navigate("Login");
@@ -97,11 +108,13 @@ export default function CadastroUsuarioScreen() {
         "Erro",
         `Ocorreu um erro ao realizar o cadastro: ${errorMessage}`
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleNomeUsuarioChange = (text: string) => {
-    const lettersAndSpacesOnly = text.replace(/[^a-zA-Z\s]/g, ""); // \s permite espaços
+    const lettersAndSpacesOnly = text.replace(/[^a-zA-Z\s]/g, "");
     setNomeUsuario(lettersAndSpacesOnly.slice(0, 40));
     setErrorFields((prev) => prev.filter((f) => f !== "nomeUsuario"));
   };
@@ -141,6 +154,48 @@ export default function CadastroUsuarioScreen() {
     }
   };
 
+  const handlePickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImagemPerfil(result.assets[0].uri || null);
+    }
+  };
+
+  const handleOpenCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImagemPerfil(result.assets[0].uri || null);
+    }
+  };
+
+  const handleImagePress = () => {
+    Alert.alert("Escolher Imagem de Perfil", "Escolha uma opção", [
+      {
+        text: "Escolher da Galeria",
+        onPress: handlePickImage,
+      },
+      {
+        text: "Abrir Câmera",
+        onPress: handleOpenCamera,
+      },
+      {
+        text: "Cancelar",
+        style: "cancel",
+      },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -149,6 +204,17 @@ export default function CadastroUsuarioScreen() {
       >
         <View style={styles.innerContainer}>
           <Text style={styles.title}>Cadastro</Text>
+
+          <TouchableOpacity onPress={handleImagePress}>
+            <Image
+              source={
+                imagemPerfil
+                  ? { uri: imagemPerfil }
+                  : require("@/assets/images/placeholder.jpg")
+              }
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
 
           <TextInput
             style={getInputStyle("nomeUsuario")}
@@ -212,7 +278,7 @@ export default function CadastroUsuarioScreen() {
             placeholder="CEP"
             keyboardType="numeric"
             value={cep}
-            onChangeText={handleCepChange} 
+            onChangeText={handleCepChange}
           />
 
           <TextInput
@@ -229,8 +295,14 @@ export default function CadastroUsuarioScreen() {
             onChangeText={setUf}
           />
 
-          <TouchableOpacity style={styles.button} onPress={handleSignUpPress}>
-            <Text style={styles.buttonText}>Cadastrar</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSignUpPress}
+            disabled={isLoading}
+          >
+            <Text style={styles.buttonText}>
+              {isLoading ? "Cadastrando..." : "Cadastrar"}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.link} onPress={handleBackToLogin}>

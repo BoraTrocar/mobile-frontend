@@ -59,6 +59,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
 });
 
 export default styles;
