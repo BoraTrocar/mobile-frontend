@@ -2,6 +2,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   ScrollView,
@@ -11,16 +12,16 @@ import {
   View,
 } from "react-native";
 import {
-  useTheme,
-  IconButton,
-  Dialog,
-  Portal,
   Button,
+  Dialog,
+  IconButton,
+  Portal,
+  useTheme,
 } from "react-native-paper";
+import { uploadImage } from "../../firebaseConfig";
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 import stylesGlobal from "../styles/globalStyles";
-import { uploadImage } from '../../firebaseConfig';
 
 export default function CadastroLivroScreen() {
   const [img, setImg] = useState<string | null>(null);
@@ -32,50 +33,52 @@ export default function CadastroLivroScreen() {
   const [descricao, setDescricao] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isbnHelpVisible, setIsbnHelpVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { colors } = useTheme();
 
+  const handleCadastrar = async () => {
+    setIsSubmitted(true);
 
-
-// In your CadastroLivroScreen component
-const handleCadastrar = async () => {
-  setIsSubmitted(true);
-
-  if (!nomeLivro || !categoria || !condicao) {
-    Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
-    return;
-  }
-
-  if (isbn && (isbn.length < 7 || isbn.length > 13)) {
-    Alert.alert(
-      "Erro",
-      "O ISBN deve ter entre 7 e 13 dígitos, se for preenchido."
-    );
-    return;
-  }
-
-  try {
-    let imageUrl = null;
-    if (img) {
-      imageUrl = await uploadImage(img);
+    if (!nomeLivro || !categoria || !condicao) {
+      Alert.alert("Erro", "Por favor, preencha todos os campos obrigatórios.");
+      return;
     }
 
-    await LivroService.cadastrarLivro({
-      imagem: imageUrl, // Use the uploaded image URL
-      isbn,
-      nomeLivro,
-      categoria,
-      autor,
-      condicao,
-      descricao,
-    });
-    Alert.alert("Sucesso", "Livro cadastrado com sucesso!");
-    handleLimpar();
-  } catch (error) {
-    console.error("Error cadastrando livro: ", error);
-    Alert.alert("Erro", "Não foi possível cadastrar o livro.");
-  }
-};
+    if (isbn && (isbn.length < 7 || isbn.length > 13)) {
+      Alert.alert(
+        "Erro",
+        "O ISBN deve ter entre 7 e 13 dígitos, se for preenchido."
+      );
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      let imageUrl = null;
+      if (img) {
+        imageUrl = await uploadImage(img);
+      }
+
+      await LivroService.cadastrarLivro({
+        imagem: imageUrl,
+        isbn,
+        nomeLivro,
+        categoria,
+        autor,
+        condicao,
+        descricao,
+      });
+      Alert.alert("Sucesso", "Livro cadastrado com sucesso!");
+      handleLimpar();
+    } catch (error) {
+      console.error("Error cadastrando livro: ", error);
+      Alert.alert("Erro", "Não foi possível cadastrar o livro.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleLimpar = () => {
     setImg(null);
@@ -207,7 +210,6 @@ const handleCadastrar = async () => {
           maxLength={50}
         />
 
-        {/* Tem que arrumar o estilo */}
         <Picker
           selectedValue={condicao}
           onValueChange={(itemValue) => setCondicao(itemValue)}
@@ -234,8 +236,13 @@ const handleCadastrar = async () => {
         <TouchableOpacity
           style={[styles.button, styles.cadastrarButton]}
           onPress={handleCadastrar}
+          disabled={isLoading}
         >
-          <Text style={styles.buttonText}>Cadastrar</Text>
+          {isLoading ? (
+            <ActivityIndicator color="#ffffff" />
+          ) : (
+            <Text style={styles.buttonText}>Cadastrar</Text>
+          )}
         </TouchableOpacity>
 
         <TouchableOpacity
