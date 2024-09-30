@@ -55,6 +55,14 @@ const styles = StyleSheet.create({
     borderColor: "#4eb3de", // Cor da borda quando em foco
     backgroundColor: "#F0F8FF", // Cor de fundo mais clara ao focar
   },
+  sentMessage: {
+    alignSelf: "flex-end",
+    backgroundColor: "#DCF8C6",
+  },
+  receivedMessage: {
+    alignSelf: "flex-start",
+    backgroundColor: "#FFFFFF",
+  },
 
   //ESTA MERDA DE REACT NATIVE É UM LIXO E NAO DA PARA FAZER UMA CARALHA DE BOTAO DIREITO
   sendButton: {

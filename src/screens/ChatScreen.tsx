@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { initializeApp } from "firebase/app";
@@ -33,13 +32,12 @@ type ChatScreenNavigationProp = NativeStackNavigationProp<
   "Chat"
 >;
 
-// Definindo o tipo Message
 type Message = {
   text: string;
   timestamp: number;
   bookId: string;
   ownerUserId: string;
-  senderUserId: string; // Novo campo para identificar o remetente
+  senderUserId: string;
 };
 
 type Props = {
@@ -53,23 +51,19 @@ export function ChatScreen({ route }: Props) {
     ownerUserId: "",
   };
 
-  const { usuario } = useAuth(); // Usando o hook de autenticação para obter o usuário logado
+  const { usuario } = useAuth(); // Hook para pegar o usuário logado
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
 
-  //mano tem q usar hook para fazer um treco tosco kkkkkkkkk
-  const [isFocused, setIsFocused] = useState(false);
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
-
-  // Identificador único do chat entre o dono do livro e o usuário logado
-  const chatId = `${bookId}_${ownerUserId}_${usuario?.nomeCompleto}`;
+  // Identificador único do chat agora é baseado no ID do livro
+  const chatId = bookId; // Agora o chat é diretamente vinculado ao livro
 
   useEffect(() => {
-    if (!usuario?.nomeCompleto) return;
+    if (!chatId || !usuario?.nomeCompleto) return;
 
-    const chatRef = ref(database, `chats/${chatId}/messages`); // Usando a referência específica do chat
+    const chatRef = ref(database, `chats/${chatId}/messages`);
 
+    // Escuta de mensagens
     onValue(chatRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
@@ -78,11 +72,11 @@ export function ChatScreen({ route }: Props) {
           timestamp: msg.timestamp,
           bookId: msg.bookId,
           ownerUserId: msg.ownerUserId,
-          senderUserId: msg.senderUserId, // Adicionando o remetente
+          senderUserId: msg.senderUserId,
         }));
         setMessages(messageList);
       } else {
-        setMessages([]); // Limpar mensagens se não houver dados
+        setMessages([]);
       }
     });
 
@@ -97,11 +91,12 @@ export function ChatScreen({ route }: Props) {
       push(chatRef, {
         text: message,
         timestamp: Date.now(),
-        bookId,
-        ownerUserId,
-        senderUserId: usuario.nomeCompleto, // Definindo o remetente como o usuário logado
+        bookId, // Vincula a mensagem ao livro
+        ownerUserId, // Dono do livro
+        senderUserId: usuario.nomeCompleto, // Remetente da mensagem
+      }).then(() => {
+        setMessage("");
       });
-      setMessage("");
     }
   };
 
@@ -111,11 +106,19 @@ export function ChatScreen({ route }: Props) {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {messages.length > 0 ? (
           messages.map((msg, index) => (
-            <Card key={index} style={styles.messageCard}>
+            <Card
+              key={index}
+              style={[
+                styles.messageCard,
+                msg.senderUserId === usuario?.nomeCompleto
+                  ? styles.sentMessage
+                  : styles.receivedMessage,
+              ]}
+            >
               <Card.Content>
-                <Text
-                  style={styles.txtMsgTitle}
-                >{`Usuário: ${msg.senderUserId}, Livro ID: ${msg.bookId}`}</Text>
+                <Text style={styles.txtMsgTitle}>
+                  {`Usuário: ${msg.senderUserId}`}
+                </Text>
                 <Text style={styles.txtMsg}>{msg.text}</Text>
               </Card.Content>
             </Card>
@@ -127,27 +130,16 @@ export function ChatScreen({ route }: Props) {
 
       <View style={styles.inputContainer}>
         <TextInput
+          style={styles.textInput}
           mode="outlined"
           placeholder="Digite sua mensagem..."
           value={message}
           onChangeText={setMessage}
-          onFocus={handleFocus} // Define o estado quando o campo está em foco
-          onBlur={handleBlur} // Define o estado quando o foco é perdido
-          style={[
-            styles.textInput,
-            isFocused && styles.textInputFocused, // Aplica o estilo quando em foco
-          ]}
         />
-        <Button
-          mode="contained"
-          icon={() => <Ionicons name="send" size={24} color="white" />}
-          onPress={handleSend}
-          style={styles.sendButton}
-        >
-          {null}
+        <Button icon="send" mode="contained" onPress={handleSend}>
+          Enviar
         </Button>
       </View>
-
       <View style={globalStyles.fixedMenu}>
         <HorizontalMenu />
       </View>
