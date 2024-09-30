@@ -8,12 +8,18 @@ import {
   ref,
 } from "firebase/database";
 import React, { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Card, Text } from "react-native-paper";
 import { Header } from "../components/header";
 import { HorizontalMenu } from "../components/menu";
 import { useAuth } from "../hooks/useAuth";
 import { RootStackParamList } from "../navigation/AppNavigator";
+import styles from "../styles/ChatHistoricoScreen";
 import globalStyles from "../styles/globalStyles";
 
 type ChatHistoryScreenNavigationProp = NativeStackNavigationProp<
@@ -31,6 +37,7 @@ type ChatPreview = {
 
 export function ChatHistorico() {
   const [chatPreviews, setChatPreviews] = useState<ChatPreview[]>([]);
+  const [loading, setLoading] = useState(true); // Estado para o loading
   const { usuario } = useAuth();
   const navigation = useNavigation<ChatHistoryScreenNavigationProp>();
 
@@ -67,6 +74,7 @@ export function ChatHistorico() {
         });
         setChatPreviews(previews.sort((a, b) => b.timestamp - a.timestamp));
       }
+      setLoading(false); // Carregamento concluído
     });
 
     return () => off(chatsRef);
@@ -81,26 +89,33 @@ export function ChatHistorico() {
         })
       }
     >
-      <Card style={{ margin: 10 }}>
+      <Card style={styles.card}>
         <Card.Content>
-          <Text variant="titleMedium">Livro ID: {item.bookId}</Text>
-          <Text variant="bodyMedium">{item.lastMessage}</Text>
-          <Text variant="bodySmall">
-            {new Date(item.timestamp).toLocaleString()}
-          </Text>
+          <Text style={styles.title}>Livro ID: {item.bookId}</Text>
+          <Text style={styles.msg}>{item.lastMessage}</Text>
+          <Text style={styles.data}>{new Date(item.timestamp).toLocaleString()}</Text>
         </Card.Content>
       </Card>
     </TouchableOpacity>
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <Header />
-      <FlatList
-        data={chatPreviews}
-        renderItem={renderChatPreview}
-        keyExtractor={(item) => item.chatId}
-      />
+
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#6200ee"
+          style={styles.loading}
+        />
+      ) : (
+        <FlatList
+          data={chatPreviews}
+          renderItem={renderChatPreview}
+          keyExtractor={(item) => item.chatId}
+        />
+      )}
       <View style={globalStyles.fixedMenu}>
         <HorizontalMenu />
       </View>
