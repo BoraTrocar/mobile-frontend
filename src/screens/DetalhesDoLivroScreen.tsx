@@ -4,28 +4,26 @@ import React from "react";
 import { ScrollView, View } from "react-native";
 import { Button, Card, Text } from "react-native-paper";
 import { HorizontalMenu } from "../components/menu";
+import { useAuth } from "../hooks/useAuth";
 import { LivroProps } from "../models/LivroProps";
 import styles from "../styles/DetalhesDoLivroScreenStyles";
 import globalStyles from "../styles/globalStyles";
 
 export type RootStackParamList = {
-  DetalhesDoLivroScreen: { livro: LivroProps }; // Tipo do livro
-  Chat: { bookId: string; ownerUserId: string }; // Parâmetros esperados para a tela de chat
+  DetalhesDoLivroScreen: { livro: LivroProps };
+  Chat: { bookId: string; ownerUserId: string };
 };
 
-// Definição da rota para a tela de detalhes do livro
 type DetalhesDoLivroScreenRouteProp = RouteProp<
   RootStackParamList,
   "DetalhesDoLivroScreen"
 >;
 
-// Definição da navegação para a tela de detalhes do livro
 type DetalhesDoLivroScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "DetalhesDoLivroScreen"
 >;
 
-// Definindo os tipos de propriedades para o componente
 type Props = {
   route: DetalhesDoLivroScreenRouteProp;
   navigation: DetalhesDoLivroScreenNavigationProp;
@@ -33,6 +31,10 @@ type Props = {
 
 export function DetalhesDoLivroScreen({ route, navigation }: Props) {
   const { livro } = route.params;
+  const { usuario } = useAuth(); // Use o hook useAuth para obter informações do usuário logado
+
+  // Verifica se o usuário logado é o autor do anúncio
+  const isOwner = usuario?.nomeCompleto === livro.usuario;
 
   return (
     <View style={styles.container}>
@@ -76,8 +78,9 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
                   ownerUserId: livro.usuario,
                 })
               }
+              disabled={isOwner}
             >
-              Chat
+              {isOwner ? "Seu Anúncio" : "Chat"}
             </Button>
           </Card>
         </View>
