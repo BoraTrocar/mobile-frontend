@@ -17,7 +17,7 @@ interface MenuItem {
 const MENU_ITEMS: MenuItem[] = [
   { id: "inicio", label: "Início", icon: "home" },
   { id: "perfil", label: "Perfil", icon: "account" },
-  { id: "chat", label: "Chat", icon: "chat" },
+  { id: "chatHistorico", label: "Chat", icon: "chat" },
   { id: "evento", label: "Evento", icon: "calendar" },
 ];
 
@@ -35,8 +35,8 @@ export function HorizontalMenu() {
         case "inicio":
           navigation.navigate("Home");
           break;
-        case "chat":
-          navigation.navigate("Chat");
+        case "chatHistorico":
+          navigation.navigate("ChatHistorico");
           break;
         case "perfil":
           navigation.navigate("Perfil");

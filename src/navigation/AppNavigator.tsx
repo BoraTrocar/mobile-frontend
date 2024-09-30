@@ -11,17 +11,19 @@ import { EventoScreen } from "../screens/EventoScreen";
 import HomeScreen from "../screens/HomeScreen";
 import { PerfilScreen } from "../screens/PerfilScreen";
 import AlteraLivroScreen from "../screens/AlteraLivroScreen";
+import { ChatHistorico } from "../screens/ChatHistoricoScreen";
 
 export type RootStackParamList = {
   Home: undefined;
   DetalhesDoLivroScreen: { livro: LivroProps };
-  Chat: undefined;
+  Chat: { bookId: string; ownerUserId?: string }; // Adicione os parâmetros necessários
   Perfil: undefined;
   Evento: undefined;
   Login: undefined;
   CadastroUsuario: undefined;
   CadastroLivro: undefined;
   AlteraLivro: undefined;
+  ChatHistorico: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -99,6 +101,14 @@ export function AppNavigator() {
           component={AlteraLivroScreen}
           options={{
             title: "Alterar Livro",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ChatHistorico"
+          component={ChatHistorico}
+          options={{
+            title: "Chat historico",
             headerShown: false,
           }}
         />
