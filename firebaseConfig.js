@@ -54,4 +54,4 @@ export const deleteImage = async (imagemUrl) => {
   }
 };
 
-export { database, storage };
+export { database, storage, app };

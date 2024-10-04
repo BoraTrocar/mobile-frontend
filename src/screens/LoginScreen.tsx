@@ -15,6 +15,18 @@ import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/LoginScreenStyles";
 import { removeToken, setToken } from "../token/tokenStorage"; // Importa a função para salvar o token
 import { useAuth } from "../hooks/useAuth";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  signInWithCredential,
+  //onAuthStateChanged,
+} from "firebase/auth";
+import {
+  AccessToken,
+  AuthenticationToken,
+  LoginManager,
+} from "react-native-fbsdk-next";
+import {app} from "../../firebaseConfig"
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -22,6 +34,39 @@ type LoginScreenNavigationProp = StackNavigationProp<
 >;
 
 export default function LoginScreen() {
+
+  //Depois tem q coponetizar esta bagaça aqui
+  const SignInWithFB = async () => {
+    try {
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+  
+      if (result.isCancelled) {
+        throw new Error('User cancelled login');
+      }
+  
+      // Get the access token
+      const data = await AccessToken.getCurrentAccessToken();
+  
+      if (!data) {
+        throw new Error('Something went wrong obtaining access token');
+      }
+  
+      // Create a Firebase credential with the AccessToken
+      const auth = getAuth(app);
+      const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
+  
+      // Sign-in the user with the credential
+      const userCredential = await signInWithCredential(auth, facebookCredential);
+      console.log('User signed in:', userCredential.user);
+  
+      // You can now use userCredential.user to access the signed-in user's information
+      
+    } catch (error) {
+      console.error('Error during Facebook login:', error);
+    }
+  };
+
   const { colors } = useTheme();
   const navigation = useNavigation<LoginScreenNavigationProp>();
 
@@ -53,7 +98,7 @@ export default function LoginScreen() {
     }
     navigation.navigate("Home");
   };
-  
+
   const handleCadastroUsuario = () => {
     navigation.navigate("CadastroUsuario");
   };
@@ -119,6 +164,16 @@ export default function LoginScreen() {
           >
             <Text style={styles.continueWithoutLoginText}>
               Continue sem login
+            </Text>
+          </TouchableOpacity>
+
+          {/* caralho de login social */}
+          <TouchableOpacity
+            style={styles.continueWithoutLoginButton}
+            onPress={SignInWithFB}
+          >
+            <Text style={styles.continueWithoutLoginText}>
+              Continue com o Facebook
             </Text>
           </TouchableOpacity>
         </View>

@@ -12,13 +12,19 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "react-native-paper";
-import { uploadImage } from "../../firebaseConfig";
+import { app, uploadImage } from "../../firebaseConfig";
 import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { CepService } from "../services/cep.service";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/CadastroUsuarioScreenStyles";
 import stylesGlobal from "../styles/globalStyles";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  signInWithCredential,
+} from "firebase/auth";
+import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 
 type CadastroUsuarioScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -29,6 +35,36 @@ const usuarioService = new UsuarioService();
 const cepService = new CepService();
 
 export default function CadastroUsuarioScreen() {
+
+  //Depois tem q coponetizar esta bagaça aqui
+  const handleFacebookLogin = async () => {
+    try {
+      const result = await LoginManager.logInWithPermissions([
+        "public_profile",
+        "email",
+      ]);
+      if (result.isCancelled) {
+        throw new Error("User cancelled login");
+      }
+
+      const data = await AccessToken.getCurrentAccessToken();
+      if (!data) {
+        throw new Error("Something went wrong obtaining access token");
+      }
+      const auth = getAuth(app);
+
+      const credential = FacebookAuthProvider.credential(data.accessToken);
+      const userCredential = await signInWithCredential(auth, credential);
+      const user = userCredential.user;
+
+      // Aqui você pode acessar os dados do usuário
+      console.log("Usuário logado:", user);
+      Alert.alert("Sucesso", "Usuário cadastrado ou logado com sucesso!");
+    } catch (error) {
+      console.error("Erro durante o login com o Facebook:", error);
+    }
+  };
+
   const { colors } = useTheme();
   const navigation = useNavigation<CadastroUsuarioScreenNavigationProp>();
 
@@ -307,6 +343,9 @@ export default function CadastroUsuarioScreen() {
 
           <TouchableOpacity style={styles.link} onPress={handleBackToLogin}>
             <Text style={styles.linkText}>Voltar para Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.link} onPress={handleFacebookLogin}>
+            <Text style={styles.linkText}>Cadastre-se com o Facebook</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
