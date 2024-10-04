@@ -1,4 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
@@ -19,11 +21,15 @@ import {
   useTheme,
 } from "react-native-paper";
 import { uploadImage } from "../../firebaseConfig";
+import { RootStackParamList } from "../navigation/AppNavigator";
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 import stylesGlobal from "../styles/globalStyles";
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 export default function CadastroLivroScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [img, setImg] = useState<string | null>(null);
   const [isbn, setIsbn] = useState("");
   const [nomeLivro, setNomeLivro] = useState("");
@@ -72,6 +78,7 @@ export default function CadastroLivroScreen() {
       });
       Alert.alert("Sucesso", "Livro cadastrado com sucesso!");
       handleLimpar();
+      navigation.navigate("Perfil");
     } catch (error) {
       console.error("Error cadastrando livro: ", error);
       Alert.alert("Erro", "Não foi possível cadastrar o livro.");
