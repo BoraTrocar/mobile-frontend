@@ -1,8 +1,9 @@
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { ScrollView, View } from "react-native";
-import { Button, Card, Text } from "react-native-paper";
+import { ScrollView, TouchableOpacity, View } from "react-native";
+import { Button, Card, Divider, Text } from "react-native-paper";
+import ComentariosLivro from "../components/comentarios";
 import { HorizontalMenu } from "../components/menu";
 import { useAuth } from "../hooks/useAuth";
 import { LivroProps } from "../models/LivroProps";
@@ -39,39 +40,37 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.cardContainer}>
-          <Card style={styles.largeCard}>
-            <Card.Content style={styles.cardContent}>
-              <Text variant="headlineLarge" style={styles.title}>
-                {livro.nomeLivro}
-              </Text>
-              <Card.Cover source={{ uri: livro.imagem }} style={styles.image} />
-              <Text variant="bodyLarge" style={styles.info}>
-                <Text style={styles.bold}>Autor: </Text>
-                {livro.autor}
-              </Text>
-              <Text variant="bodyLarge" style={styles.info}>
-                <Text style={styles.bold}>Anunciante: </Text>
-                {livro.usuario}
-              </Text>
-              <Text variant="bodyLarge" style={styles.info}>
-                <Text style={styles.bold}>Categoria: </Text>
-                {livro.categoria}
-              </Text>
-              <Text variant="bodyLarge" style={styles.info}>
-                <Text style={styles.bold}>Condição: </Text>
-                {livro.condicao}
-              </Text>
-              <Text variant="bodyLarge" style={styles.info}>
-                <Text style={styles.bold}>Descrição: </Text>
-                {livro.descricao}
-              </Text>
-            </Card.Content>
-            <Button
-              mode="contained"
-              style={styles.button}
-              contentStyle={styles.buttonContent}
-              labelStyle={styles.buttonLabel}
+        <Card style={styles.largeCard}>
+          <Card.Content>
+            <Text variant="headlineLarge" style={styles.title}>
+              {livro.nomeLivro}
+            </Text>
+            <Card.Cover source={{ uri: livro.imagem }} style={styles.image} />
+            <Text variant="bodyLarge" style={styles.info}>
+              <Text style={styles.bold}>Autor: </Text>
+              {livro.autor}
+            </Text>
+            <Text variant="bodyLarge" style={styles.info}>
+              <Text style={styles.bold}>Anunciante: </Text>
+              {livro.usuario}
+            </Text>
+            <Text variant="bodyLarge" style={styles.info}>
+              <Text style={styles.bold}>Categoria: </Text>
+              {livro.categoria}
+            </Text>
+            <Text variant="bodyLarge" style={styles.info}>
+              <Text style={styles.bold}>Condição: </Text>
+              {livro.condicao}
+            </Text>
+            <Text variant="bodyLarge" style={styles.info}>
+              <Text style={styles.bold}>Descrição: </Text>
+              {livro.descricao}
+            </Text>
+          </Card.Content>
+
+          <Card.Actions style={styles.cardActionsContainer}>
+            <TouchableOpacity
+              style={[styles.button, isOwner && styles.disabledButton]}
               onPress={() =>
                 navigation.navigate("Chat", {
                   bookId: livro.idLivro,
@@ -79,11 +78,20 @@ export function DetalhesDoLivroScreen({ route, navigation }: Props) {
                 })
               }
               disabled={isOwner}
+              activeOpacity={0.7}
             >
-              {isOwner ? "Seu Anúncio" : "Chat"}
-            </Button>
-          </Card>
-        </View>
+              <Text style={styles.buttonLabel}>
+                {isOwner ? "Seu Anúncio" : "Negocie"}
+              </Text>
+            </TouchableOpacity>
+          </Card.Actions>
+
+          <Divider />
+
+          <Card.Content>
+            <ComentariosLivro idLivro={livro.idLivro} />
+          </Card.Content>
+        </Card>
       </ScrollView>
 
       <View style={globalStyles.fixedMenu}>

@@ -5,23 +5,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E3F2FD",
     justifyContent: "center",
-    paddingTop: 25,
+    alignItems: "center",
+    paddingTop: 50,
+    paddingHorizontal: 5,
   },
   scrollContainer: {
     paddingBottom: 80,
-    paddingTop: 16,
-  },
-  cardContainer: {
-    paddingHorizontal: 16,
+    paddingTop: 25,
   },
   largeCard: {
     borderRadius: 16,
     backgroundColor: "white",
     elevation: 4,
     marginBottom: 16,
-  },
-  cardContent: {
-    padding: 16,
   },
   title: {
     fontSize: 24,
@@ -45,16 +41,23 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   button: {
-    marginVertical: 16,
-    alignSelf: "center",
     backgroundColor: "#4eb3de",
-  },
-  buttonContent: {
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 100,
     height: 45,
-    paddingHorizontal: 100,
+  },
+  disabledButton: {
+    backgroundColor: "#cccccc",
   },
   buttonLabel: {
     fontSize: 18,
+    color: "white",
+  },
+  cardActionsContainer: {
+    paddingVertical: 16,
+    margin: "auto",
   },
 });
 
