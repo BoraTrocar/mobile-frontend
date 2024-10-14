@@ -35,7 +35,6 @@ const usuarioService = new UsuarioService();
 const cepService = new CepService();
 
 export default function CadastroUsuarioScreen() {
-
   //Depois tem q coponetizar esta bagaça aqui
   const handleFacebookLogin = async () => {
     try {
@@ -232,6 +231,24 @@ export default function CadastroUsuarioScreen() {
     ]);
   };
 
+  //nem sei como essa carniça deu certo kkkkkkkkk
+  const handleDataNascimentoChange = (text: string) => {
+    let formattedText = text.replace(/\D/g, "");
+
+    if (formattedText.length > 2 && formattedText.length <= 4) {
+      formattedText = formattedText.slice(0, 2) + "/" + formattedText.slice(2);
+    } else if (formattedText.length > 4) {
+      formattedText =
+        formattedText.slice(0, 2) +
+        "/" +
+        formattedText.slice(2, 4) +
+        "/" +
+        formattedText.slice(4, 8);
+    }
+
+    setDataNascimento(formattedText.slice(0, 10));
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -298,15 +315,11 @@ export default function CadastroUsuarioScreen() {
 
           <TextInput
             style={getInputStyle("dataNascimento")}
-            placeholder="Data de Nascimento*"
+            placeholder="Data de Nascimento* (dd/MM/aaaa)"
             value={dataNascimento}
             keyboardType="numeric"
-            onChangeText={(text) => {
-              setDataNascimento(text);
-              setErrorFields((prev) =>
-                prev.filter((f) => f !== "dataNascimento")
-              );
-            }}
+            onChangeText={handleDataNascimentoChange}
+            maxLength={10}
           />
 
           <TextInput
