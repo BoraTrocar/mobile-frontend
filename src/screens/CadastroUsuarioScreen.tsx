@@ -1,30 +1,30 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as ImagePicker from "expo-image-picker";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  signInWithCredential,
+} from "firebase/auth";
 import React, { useState } from "react";
 import {
   Alert,
-  Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { AccessToken, LoginManager } from "react-native-fbsdk-next";
 import { useTheme } from "react-native-paper";
 import { app, uploadImage } from "../../firebaseConfig";
+import { CadastroImg } from "../components/cadastroImg";
 import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { CepService } from "../services/cep.service";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/CadastroUsuarioScreenStyles";
 import stylesGlobal from "../styles/globalStyles";
-import {
-  FacebookAuthProvider,
-  getAuth,
-  signInWithCredential,
-} from "firebase/auth";
-import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 
 type CadastroUsuarioScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -189,48 +189,6 @@ export default function CadastroUsuarioScreen() {
     }
   };
 
-  const handlePickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setImagemPerfil(result.assets[0].uri || null);
-    }
-  };
-
-  const handleOpenCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setImagemPerfil(result.assets[0].uri || null);
-    }
-  };
-
-  const handleImagePress = () => {
-    Alert.alert("Escolher Imagem de Perfil", "Escolha uma opção", [
-      {
-        text: "Escolher da Galeria",
-        onPress: handlePickImage,
-      },
-      {
-        text: "Abrir Câmera",
-        onPress: handleOpenCamera,
-      },
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-    ]);
-  };
-
   //nem sei como essa carniça deu certo kkkkkkkkk
   const handleDataNascimentoChange = (text: string) => {
     let formattedText = text.replace(/\D/g, "");
@@ -258,16 +216,7 @@ export default function CadastroUsuarioScreen() {
         <View style={styles.innerContainer}>
           <Text style={styles.title}>Cadastro</Text>
 
-          <TouchableOpacity onPress={handleImagePress}>
-            <Image
-              source={
-                imagemPerfil
-                  ? { uri: imagemPerfil }
-                  : require("@/assets/images/placeholder.jpg")
-              }
-              style={styles.profileImage}
-            />
-          </TouchableOpacity>
+          <CadastroImg img={imagemPerfil} onImageSelect={setImagemPerfil} />
 
           <TextInput
             style={getInputStyle("nomeUsuario")}

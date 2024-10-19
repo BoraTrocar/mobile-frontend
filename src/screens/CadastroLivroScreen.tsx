@@ -1,31 +1,24 @@
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  Button,
-  Dialog,
-  IconButton,
-  Portal,
-  useTheme,
-} from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import { uploadImage } from "../../firebaseConfig";
+import { AjudaISBN } from "../components/ajudaISBN";
+import { CadastroImg } from "../components/cadastroImg";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 import stylesGlobal from "../styles/globalStyles";
-import { AjudaISBN } from "../components/ajudaISBN";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -99,48 +92,6 @@ export default function CadastroLivroScreen() {
     setIsSubmitted(false);
   };
 
-  const handlePickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setImg(result.assets[0].uri || null);
-    }
-  };
-
-  const handleOpenCamera = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      setImg(result.assets[0].uri || null);
-    }
-  };
-
-  const handleImagePress = () => {
-    Alert.alert("Escolher Imagem", "Escolha uma opção", [
-      {
-        text: "Escolher Imagem",
-        onPress: handlePickImage,
-      },
-      {
-        text: "Abrir Câmera",
-        onPress: handleOpenCamera,
-      },
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-    ]);
-  };
-
   const handleIsbnChange = (text: string) => {
     const numericValue = text.replace(/[^0-9]/g, "");
     setIsbn(numericValue.slice(0, 13));
@@ -163,14 +114,8 @@ export default function CadastroLivroScreen() {
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Cadastrar Livro</Text>
 
-        <TouchableOpacity onPress={handleImagePress}>
-          <Image
-            source={
-              img ? { uri: img } : require("@/assets/images/placeholder.jpg")
-            }
-            style={styles.image}
-          />
-        </TouchableOpacity>
+        <CadastroImg img={img} onImageSelect={setImg} />
+
         <View style={styles.isbnContainer}>
           <TextInput
             style={[styles.input, styles.isbnInput]}
