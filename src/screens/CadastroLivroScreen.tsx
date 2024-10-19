@@ -226,9 +226,9 @@ export default function CadastroLivroScreen() {
           ]}
         >
           <Picker.Item label="Selecione a Condição*" value="" />
-          <Picker.Item label="Novo" value="novo" />
-          <Picker.Item label="Usado" value="usado" />
-          <Picker.Item label="Avariado" value="avariado" />
+          <Picker.Item label="Novo" value="NOVO" />
+          <Picker.Item label="Usado" value="USADO" />
+          <Picker.Item label="Avariado" value="AVARIADO" />
         </Picker>
 
         <TextInput
