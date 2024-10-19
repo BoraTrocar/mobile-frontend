@@ -25,6 +25,7 @@ import { RootStackParamList } from "../navigation/AppNavigator";
 import LivroService from "../services/livro.service";
 import styles from "../styles/CadastroLivroScreen";
 import stylesGlobal from "../styles/globalStyles";
+import { AjudaISBN } from "../components/ajudaISBN";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -181,11 +182,13 @@ export default function CadastroLivroScreen() {
           />
           <IconButton
             icon="help-circle-outline"
+            iconColor={colors.primary}
             size={20}
             onPress={mostraIsbnAjuda}
-            style={styles.iconButton}
           />
         </View>
+
+        <AjudaISBN visible={isbnHelpVisible} onDismiss={hideIsbnHelp} />
 
         <TextInput
           style={[
@@ -258,35 +261,6 @@ export default function CadastroLivroScreen() {
         >
           <Text style={styles.buttonText}>Limpar</Text>
         </TouchableOpacity>
-
-        <Portal>
-          <Dialog
-            style={styles.dialogAjuda}
-            visible={isbnHelpVisible}
-            onDismiss={hideIsbnHelp}
-          >
-            <Dialog.Title style={styles.tituloDialog}>
-              O que é ISBN?
-            </Dialog.Title>
-            <Dialog.Content>
-              <Text>
-                ISBN significa "International Standard Book Number". É um número
-                único de 13 dígitos usado para identificar livros e outros tipos
-                de publicações. Cada ISBN é único para um livro específico e
-                ajuda na organização e busca de livros em todo o mundo.
-              </Text>
-            </Dialog.Content>
-            <Dialog.Title style={styles.tituloDialog}>
-              Onde encontra-lo?
-            </Dialog.Title>
-            <Dialog.Content>
-              <Text>Atras do seu livro proximo ao codigo de barras!</Text>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={hideIsbnHelp}>Entendi</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
       </View>
     </ScrollView>
   );
