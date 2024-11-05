@@ -7,7 +7,7 @@ export function CardHorizontallivro({ livro }: { livro: LivroProps }) {
   return (
     <Pressable>
       <Card style={styles.card}>
-        <Card.Cover source={{ uri: livro.image }} style={styles.cover} />
+        <Card.Cover source={{ uri: livro.imagem }} style={styles.cover} />
         <Card.Content style={styles.content}>
           <Title style={styles.title}>{livro.nomeLivro}</Title>
           <Paragraph style={styles.author}>{livro.autor}</Paragraph>

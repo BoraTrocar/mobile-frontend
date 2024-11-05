@@ -1,5 +1,5 @@
-import { ApiService } from "./api.service";
 import { deleteImage, uploadImage } from "../../firebaseConfig";
+import { ApiService } from "./api.service";
 
 class LivroService extends ApiService {
   async cadastrarLivro(data: {
@@ -97,6 +97,15 @@ class LivroService extends ApiService {
 
     return this.put(`/livro/alterar/${idLivro}`, formData, headers);
   }
-}
 
+  async livrosSugeridos(distanciaKm: number) {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    return this.get(`/livro/pesquisarlocalizacao/${distanciaKm}`, config);
+  }
+}
 export default new LivroService();

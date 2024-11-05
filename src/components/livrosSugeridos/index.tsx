@@ -1,29 +1,30 @@
 import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { LivroProps } from "../../models/LivroProps";
-import { ApiService } from "../../services/api.service";
+import LivroService from "../../services/livro.service";
 import { CardHorizontallivro } from "./livro";
 
 export function LivrosSugeridos() {
   const [livros, setLivros] = useState<LivroProps[]>([]);
-  const apiService = new ApiService();
 
   useEffect(() => {
-    async function getLivros() {
+    const fetchLivros = async () => {
       try {
-        const data = await apiService.get("/livro/all");
-        setLivros(data);
+        const response = await LivroService.livrosSugeridos(50);
+        setLivros(response);
+        console.log(response, "response");
       } catch (error) {
-        console.error("Erro ao buscar livros:", error);
+        console.error("Erro ao buscar livros sugeridos:", error);
       }
-    }
+    };
 
-    getLivros();
+    fetchLivros();
   }, []);
 
   return (
     <FlatList
       data={livros}
+      keyExtractor={(item) => item.idLivro.toString()} // Atualizado para usar idLivro
       renderItem={({ item }) => <CardHorizontallivro livro={item} />}
       horizontal={true}
       contentContainerStyle={{ gap: 14, paddingLeft: 16, paddingRight: 16 }}
