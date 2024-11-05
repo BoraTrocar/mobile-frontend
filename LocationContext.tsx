@@ -7,6 +7,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 type LocationContextType = {
   cidade: string | null;
+  latitude: number | null; // Adicione essa linha
+  longitude: number | null; // Adicione essa linha
   atualizaLocalizacao: () => Promise<void>;
 };
 
@@ -18,6 +20,8 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [cidade, setCidade] = useState<string | null>(null);
+  const [latitude, setLatitude] = useState<number | null>(null); // Adicione essa linha
+  const [longitude, setLongitude] = useState<number | null>(null); // Adicione essa linha
 
   const atualizaLocalizacao = async () => {
     try {
@@ -26,7 +30,12 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
         const currentPosition = await getCurrentPositionAsync();
         const { latitude, longitude } = currentPosition.coords;
 
+        setLatitude(latitude); // Adicione essa linha
+        setLongitude(longitude); // Adicione essa linha
+
         fetchCidadeCoordenadas(latitude, longitude);
+        console.log(latitude);
+        console.log(longitude);
       } else {
         console.log("Permissão de localização negada");
       }
@@ -62,7 +71,9 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   return (
-    <LocationContext.Provider value={{ cidade, atualizaLocalizacao }}>
+    <LocationContext.Provider
+      value={{ cidade, latitude, longitude, atualizaLocalizacao }}
+    >
       {children}
     </LocationContext.Provider>
   );

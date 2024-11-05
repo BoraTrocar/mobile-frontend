@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import * as ImagePicker from "expo-image-picker";
 import {
   FacebookAuthProvider,
   getAuth,
@@ -18,6 +17,7 @@ import {
 import { AccessToken, LoginManager } from "react-native-fbsdk-next";
 import { useTheme } from "react-native-paper";
 import { app, uploadImage } from "../../firebaseConfig";
+import { useLocation } from "../../LocationContext";
 import { CadastroImg } from "../components/cadastroImg";
 import { UsuarioCadastro } from "../models/UsuarioCadastro";
 import { RootStackParamList } from "../navigation/AppNavigator";
@@ -35,7 +35,22 @@ const usuarioService = new UsuarioService();
 const cepService = new CepService();
 
 export default function CadastroUsuarioScreen() {
-  //Depois tem q coponetizar esta bagaça aqui
+  const { colors } = useTheme();
+  const navigation = useNavigation<CadastroUsuarioScreenNavigationProp>();
+  const { atualizaLocalizacao, latitude, longitude } = useLocation();
+
+  const [imagemPerfil, setImagemPerfil] = useState<string | null>(null);
+  const [nomeUsuario, setNomeUsuario] = useState("");
+  const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [senha, setSenha] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [cep, setCep] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [uf, setUf] = useState("");
+  const [errorFields, setErrorFields] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleFacebookLogin = async () => {
     try {
       const result = await LoginManager.logInWithPermissions([
@@ -64,23 +79,6 @@ export default function CadastroUsuarioScreen() {
     }
   };
 
-  const { colors } = useTheme();
-  const navigation = useNavigation<CadastroUsuarioScreenNavigationProp>();
-
-  const [imagemPerfil, setImagemPerfil] = useState<string | null>(null);
-  const [nomeUsuario, setNomeUsuario] = useState("");
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [senha, setSenha] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
-  const [cep, setCep] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [uf, setUf] = useState("");
-
-  const [errorFields, setErrorFields] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  /* Por enquanto vai ficar assim nao sei fazer melhor nao */
   const handleSignUpPress = async () => {
     const errors = [];
     if (!nomeUsuario || nomeUsuario.length < 3) {
@@ -116,22 +114,46 @@ export default function CadastroUsuarioScreen() {
         imageUrl = await uploadImage(imagemPerfil);
       }
 
-      const newUser: UsuarioCadastro = {
-        imagemPerfil: imageUrl,
-        nomeUsuario,
-        email,
-        nickname,
-        senha,
-        dataNascimento,
-        cep,
-        cidade,
-        uf,
-      };
+      await new Promise((resolve) => {
+        Alert.alert(
+          "Localização",
+          "Deseja receber sugestões de anúncios com base em sua localização?",
+          [
+            {
+              text: "Não",
+              onPress: () => resolve({ latitude: null, longitude: null }),
+            },
+            {
+              text: "Sim",
+              onPress: async () => {
+                await atualizaLocalizacao();
+                resolve({
+                  latitude: latitude,
+                  longitude: longitude,
+                });
+              },
+            },
+          ]
+        );
+      }).then(async (coordenadas: any) => {
+        const newUser: UsuarioCadastro = {
+          imagemPerfil: imageUrl,
+          nomeUsuario,
+          email,
+          nickname,
+          senha,
+          dataNascimento,
+          cep,
+          cidade,
+          uf,
+          latitude: coordenadas.latitude,
+          longitude: coordenadas.longitude,
+        };
 
-      //console.log("Dados enviados:", JSON.stringify(newUser, null, 2));
-      await usuarioService.cadastrarUsuario(newUser);
-      Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
-      navigation.navigate("Login");
+        await usuarioService.cadastrarUsuario(newUser);
+        Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
+        navigation.navigate("Login");
+      });
     } catch (error) {
       let errorMessage = "Ocorreu um erro desconhecido.";
 
