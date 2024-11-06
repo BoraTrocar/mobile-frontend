@@ -1,10 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
-import { Alert, Platform, View } from "react-native";
-import { IconButton, Menu } from "react-native-paper";
-
-/* So Deus e o chat GPT sabe como isso aqui funciona */
+import { Alert, Platform } from "react-native";
+import { PerfilMenu } from "../perfiMenu";
 
 interface NotificacaoSettingsProps {
   onLogout: () => Promise<void>;
@@ -46,9 +44,6 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
     });
   };
 
-  const abreMenu = () => setVisible(true);
-  const fechaMenu = () => setVisible(false);
-
   const handleNotificacao = () => {
     Alert.alert(
       "Configurações de Notificação",
@@ -83,6 +78,8 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
       { cancelable: false }
     );
   };
+
+  const toggleMenu = () => setVisible((prev) => !prev);
 
   const scheduleNotification = async (date: Date) => {
     try {
@@ -131,29 +128,13 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
   };
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-      <Menu
+    <>
+      <PerfilMenu
         visible={visible}
-        onDismiss={fechaMenu}
-        anchor={<IconButton icon="cog" size={24} onPress={abreMenu} />}
-      >
-        <Menu.Item
-          onPress={() => {
-            fechaMenu();
-            onLogout();
-          }}
-          title="Deslogar"
-          leadingIcon="logout"
-        />
-        <Menu.Item
-          onPress={() => {
-            fechaMenu();
-            handleNotificacao();
-          }}
-          title="Notificações"
-          leadingIcon="bell"
-        />
-      </Menu>
+        onDismiss={toggleMenu}
+        onLogout={onLogout}
+        onNotificationPress={handleNotificacao}
+      />
 
       {showTimePicker && (
         <DateTimePicker
@@ -164,6 +145,6 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
           onChange={onTimeChange}
         />
       )}
-    </View>
+    </>
   );
 };
