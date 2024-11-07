@@ -1,11 +1,22 @@
+import { useRaio } from "@/RaioContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
-import { Alert, Platform } from "react-native";
+import {
+  Alert,
+  Button,
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { PerfilMenu } from "../perfiMenu";
 
 interface NotificacaoSettingsProps {
   onLogout: () => Promise<void>;
+  onRaioChange: (raio: number) => void;
 }
 
 export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
@@ -15,6 +26,9 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
   const [notificacoesAtivas, setNotificacoesAtivas] = useState(false);
   const [horarioNotificacao, setHorarioNotificacao] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showRaioModal, setShowRaioModal] = useState(false);
+  const { raio, setRaio } = useRaio();
+  const [inputRaio, setInputRaio] = useState("");
 
   useEffect(() => {
     configuraNotificacao();
@@ -79,6 +93,22 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
     );
   };
 
+  const handleConfigLocalizacao = () => {
+    setShowRaioModal(true);
+  };
+
+  const salvarRaio = () => {
+    const valor = parseInt(inputRaio);
+    if (!isNaN(valor) && valor > 0) {
+      setRaio(valor);
+      setShowRaioModal(false);
+      setInputRaio("");
+      console.log(`Raio de ${valor} km definido.`);
+    } else {
+      Alert.alert("Valor inválido", "Insira um número válido.");
+    }
+  };
+
   const toggleMenu = () => setVisible((prev) => !prev);
 
   const scheduleNotification = async (date: Date) => {
@@ -134,6 +164,7 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
         onDismiss={toggleMenu}
         onLogout={onLogout}
         onNotificationPress={handleNotificacao}
+        onConfigLocationPress={handleConfigLocalizacao}
       />
 
       {showTimePicker && (
@@ -145,6 +176,74 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
           onChange={onTimeChange}
         />
       )}
+
+      <Modal
+        transparent={true}
+        visible={showRaioModal}
+        onRequestClose={() => setShowRaioModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Configuração de Localização</Text>
+            <Text style={styles.modalText}>
+              Insira o raio em quilômetros para receber sugestões de livros:
+            </Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={inputRaio}
+              onChangeText={setInputRaio}
+              placeholder="Digite o raio em km"
+            />
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Cancelar"
+                onPress={() => setShowRaioModal(false)}
+              />
+              <Button title="Salvar" onPress={salvarRaio} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  modalText: {
+    textAlign: "center",
+    marginBottom: 15,
+  },
+  input: {
+    width: "100%",
+    padding: 10,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+});

@@ -7,6 +7,7 @@ interface PerfilMenuProps {
   onDismiss: () => void;
   onLogout: () => Promise<void>;
   onNotificationPress: () => void;
+  onConfigLocationPress: () => void;
 }
 
 export const PerfilMenu: React.FC<PerfilMenuProps> = ({
@@ -14,6 +15,7 @@ export const PerfilMenu: React.FC<PerfilMenuProps> = ({
   onDismiss,
   onLogout,
   onNotificationPress,
+  onConfigLocationPress,
 }) => {
   return (
     <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
@@ -37,6 +39,14 @@ export const PerfilMenu: React.FC<PerfilMenuProps> = ({
           }}
           title="Notificações"
           leadingIcon="bell"
+        />
+        <Menu.Item
+          onPress={() => {
+            onDismiss();
+            onConfigLocationPress();
+          }}
+          title="Localização"
+          leadingIcon="map-marker"
         />
       </Menu>
     </View>

@@ -1,9 +1,7 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { StackNavigationProp } from "@react-navigation/stack";
-import * as Notifications from "expo-notifications";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Alert, Image, ScrollView, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { Card, Text } from "react-native-paper";
 import { Header } from "../components/header";
 import { LivroPerfilCard } from "../components/livroPerfilCard";
@@ -24,6 +22,8 @@ type PerfilScreenNavigationProp = StackNavigationProp<
 
 export function PerfilScreen() {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [raio, setRaio] = useState<number | null>(null);
+
   const [carregando, setCarregando] = useState(true);
   const usuarioService = new UsuarioService();
   const navigation = useNavigation<PerfilScreenNavigationProp>();
@@ -77,12 +77,20 @@ export function PerfilScreen() {
     );
   }
 
+  const handleRaioChange = (novoRaio: number) => {
+    setRaio(novoRaio);
+    console.log(`Raio alterado para: ${novoRaio}`);
+  };
+
   return (
     <View style={styles.container}>
       <Header />
       <Card style={styles.card}>
         <View style={styles.settingsMenu}>
-          <NotificacaoSettings onLogout={handleLogout} />
+          <NotificacaoSettings
+            onLogout={handleLogout}
+            onRaioChange={handleRaioChange}
+          />
         </View>
         <View style={styles.cardContent}>
           <Image source={{ uri: usuario.imagemPerfil }} style={styles.avatar} />

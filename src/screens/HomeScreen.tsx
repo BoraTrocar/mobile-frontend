@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useTheme } from "react-native-paper";
 
+import { useRaio } from "@/RaioContext";
 import { Banner } from "../components/banner";
 import { BarraDePesquisa } from "../components/barraDePesquisa";
 import { Header } from "../components/header";
@@ -18,6 +19,7 @@ export default function HomeScreen() {
   const [resultadosPesquisa, setResultadosPesquisa] = useState<
     LivroProps[] | null
   >(null);
+  const { raio } = useRaio();
 
   const handleResultadosPesquisa = (resultados: LivroProps[]) => {
     setResultadosPesquisa(resultados);
