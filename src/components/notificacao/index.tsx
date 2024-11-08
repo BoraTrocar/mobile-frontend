@@ -1,4 +1,3 @@
-import { useRaio } from "@/RaioContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
@@ -9,9 +8,9 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from "react-native";
+import { LocationSettingsModal } from "../localizacao/localizacao";
 import { PerfilMenu } from "../perfiMenu";
 
 interface NotificacaoSettingsProps {
@@ -26,9 +25,8 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
   const [notificacoesAtivas, setNotificacoesAtivas] = useState(false);
   const [horarioNotificacao, setHorarioNotificacao] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showNotificacaoModal, setShowNotificacaoModal] = useState(false);
   const [showRaioModal, setShowRaioModal] = useState(false);
-  const { raio, setRaio } = useRaio();
-  const [inputRaio, setInputRaio] = useState("");
 
   useEffect(() => {
     configuraNotificacao();
@@ -59,57 +57,26 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
   };
 
   const handleNotificacao = () => {
-    Alert.alert(
-      "Configurações de Notificação",
-      "Configure suas preferências de notificação",
-      [
-        {
-          text: notificacoesAtivas
-            ? "Desativar Notificações"
-            : "Ativar Notificações",
-          onPress: () => {
-            setNotificacoesAtivas((prev) => !prev);
-            console.log(
-              `Notificações ${notificacoesAtivas ? "desativadas" : "ativadas"}`
-            );
-          },
-        },
-        {
-          text: "Agendar Horário",
-          onPress: () => {
-            if (notificacoesAtivas) {
-              setShowTimePicker(true);
-            } else {
-              Alert.alert(
-                "Notificações estão desativadas",
-                "Ative as notificações para agendar um horário."
-              );
-            }
-          },
-        },
-        { text: "Cancelar", style: "cancel" },
-      ],
-      { cancelable: false }
-    );
+    setShowNotificacaoModal(true);
   };
 
   const handleConfigLocalizacao = () => {
     setShowRaioModal(true);
   };
 
-  const salvarRaio = () => {
-    const valor = parseInt(inputRaio);
-    if (!isNaN(valor) && valor > 0) {
-      setRaio(valor);
-      setShowRaioModal(false);
-      setInputRaio("");
-      console.log(`Raio de ${valor} km definido.`);
+  const salvarNotificacoes = () => {
+    setNotificacoesAtivas((prev) => !prev);
+    setShowNotificacaoModal(false);
+    console.log(
+      `Notificações ${notificacoesAtivas ? "desativadas" : "ativadas"}`
+    );
+
+    if (notificacoesAtivas) {
+      scheduleNotification(horarioNotificacao);
     } else {
-      Alert.alert("Valor inválido", "Insira um número válido.");
+      Notifications.cancelAllScheduledNotificationsAsync();
     }
   };
-
-  const toggleMenu = () => setVisible((prev) => !prev);
 
   const scheduleNotification = async (date: Date) => {
     try {
@@ -131,6 +98,7 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
       console.log(
         `Notificação agendada com ID: ${id} para (hora local): ${trigger.toLocaleString()}`
       );
+      setShowNotificacaoModal(false);
     } catch (error) {
       console.error("Falha ao agendar a notificação:", error);
       Alert.alert(
@@ -157,6 +125,8 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
     }
   };
 
+  const toggleMenu = () => setVisible((prev) => !prev);
+
   return (
     <>
       <PerfilMenu
@@ -179,32 +149,39 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
 
       <Modal
         transparent={true}
-        visible={showRaioModal}
-        onRequestClose={() => setShowRaioModal(false)}
+        visible={showNotificacaoModal}
+        onRequestClose={() => setShowNotificacaoModal(false)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Configuração de Localização</Text>
+            <Text style={styles.modalTitle}>Configurações de Notificação</Text>
             <Text style={styles.modalText}>
-              Insira o raio em quilômetros para receber sugestões de livros:
+              Ative as notificações e informe um horario para que possamos te
+              lembrar de dar uma olhada nos anuncios!
             </Text>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
-              value={inputRaio}
-              onChangeText={setInputRaio}
-              placeholder="Digite o raio em km"
-            />
             <View style={styles.buttonContainer}>
               <Button
-                title="Cancelar"
-                onPress={() => setShowRaioModal(false)}
+                title={notificacoesAtivas ? "Desativar" : "Ativar"}
+                onPress={salvarNotificacoes}
               />
-              <Button title="Salvar" onPress={salvarRaio} />
+
+              <Button
+                title="Agendar Horário"
+                onPress={() => setShowTimePicker(true)}
+              />
             </View>
+            <Button
+              title="Cancelar"
+              onPress={() => setShowNotificacaoModal(false)}
+            />
           </View>
         </View>
       </Modal>
+
+      <LocationSettingsModal
+        visible={showRaioModal}
+        onClose={() => setShowRaioModal(false)}
+      />
     </>
   );
 };
@@ -232,18 +209,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 15,
   },
-  input: {
-    width: "100%",
-    padding: 10,
-    borderColor: "#ddd",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 15,
-    textAlign: "center",
-  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+    marginBottom: "10%",
   },
 });
