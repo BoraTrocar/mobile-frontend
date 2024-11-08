@@ -3,9 +3,17 @@ import { Pressable, StyleSheet } from "react-native";
 import { Card, Paragraph, Title } from "react-native-paper";
 import { LivroProps } from "../../../models/LivroProps";
 
-export function CardHorizontallivro({ livro }: { livro: LivroProps }) {
+type CardHorizontalLivroProps = {
+  livro: LivroProps;
+  onPress: (livro: LivroProps) => void;
+};
+
+export function CardHorizontallivro({
+  livro,
+  onPress,
+}: CardHorizontalLivroProps) {
   return (
-    <Pressable>
+    <Pressable onPress={() => onPress(livro)}>
       <Card style={styles.card}>
         <Card.Cover source={{ uri: livro.imagem }} style={styles.cover} />
         <Card.Content style={styles.content}>
