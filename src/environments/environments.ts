@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: "http://192.168.1.133:8090",
+  apiUrl: "http://192.168.1.135:8090",
 
   //apiUrl: "https://boratrocar.net:8090",
 

@@ -39,9 +39,11 @@ class LivroService extends ApiService {
     return this.post("/livro/cadastrar", requestData, headers);
   }
 
-  // Puxa todos os livros
-  async obterTodosOsLivros() {
-    return this.get("/livro/all");
+  async obterLivrosPaginados(page: number, size: number) {
+    const response = await this.get(`/anuncio?page=${page}&size=${size}`);
+    console.log("Buscando página:", page, "com tamanho:", size);
+    //console.log("Response:", response);
+    return response;
   }
 
   // Deletar livro
