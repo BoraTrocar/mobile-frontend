@@ -14,20 +14,23 @@ import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/PerfilScreenStyles";
 import globalStyles from "../styles/globalStyles";
 import { getToken, removeToken } from "../token/tokenStorage";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 
-type PerfilScreenNavigationProp = StackNavigationProp<
+type PerfilScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "Perfil"
 >;
 
-export function PerfilScreen() {
+type Props = {
+  navigation: PerfilScreenNavigationProp;
+};
+
+export function PerfilScreen({ navigation }: Props) {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [raio, setRaio] = useState<number | null>(null);
 
   const [carregando, setCarregando] = useState(true);
-  const usuarioService = new UsuarioService();
-  const navigation = useNavigation<PerfilScreenNavigationProp>();
-
+  const usuarioService = new UsuarioService(); //const navigation = useNavigation<PerfilScreenNavigationProp>();
   useEffect(() => {
     async function fetchUsuario() {
       try {
