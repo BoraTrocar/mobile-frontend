@@ -7,4 +7,5 @@ export interface Usuario {
   nickname: string;
   tipoConta: string;
   anunciosPostados: LivroProps[]; // Lista de livros
+  notificacao: boolean;
 }

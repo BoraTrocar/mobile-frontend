@@ -1,4 +1,6 @@
 import notificacaoService from "@/src/services/notificacao.service";
+import { UsuarioService } from "@/src/services/usuario.service";
+import { getToken } from "@/src/token/tokenStorage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
@@ -18,12 +20,15 @@ interface NotificacaoSettingsProps {
   onLogout: () => Promise<void>;
   onRaioChange: (raio: number) => void;
 }
+const usuarioService = new UsuarioService();
 
 export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
   onLogout,
 }) => {
   const [visible, setVisible] = useState(false);
-  const [notificacoesAtivas, setNotificacoesAtivas] = useState(false);
+  const [notificacoesAtivas, setNotificacoesAtivas] = useState<boolean | null>(
+    null
+  );
   const [horarioNotificacao, setHorarioNotificacao] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [showNotificacaoModal, setShowNotificacaoModal] = useState(false);
@@ -31,6 +36,7 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
 
   useEffect(() => {
     configuraNotificacao();
+    fetchNotificacaoStatus();
   }, []);
 
   const configuraNotificacao = async () => {
@@ -55,6 +61,22 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
         shouldSetBadge: false,
       }),
     });
+  };
+
+  const fetchNotificacaoStatus = async () => {
+    try {
+      const token = await getToken();
+      if (token) {
+        const usuario = await usuarioService.perfilUsuario(token);
+        // Ajuste o nome da propriedade conforme o retorno do seu backend
+        setNotificacoesAtivas(usuario.notificacao);
+        console.log('foi');
+        
+      }
+    } catch (error) {
+      console.error("Erro ao buscar status de notificação:", error);
+      setNotificacoesAtivas(false);
+    }
   };
 
   const handleNotificacao = () => {
@@ -171,8 +193,15 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
             </Text>
             <View style={styles.buttonContainer}>
               <Button
-                title={notificacoesAtivas ? "Desativar" : "Ativar"}
+                title={
+                  notificacoesAtivas === null
+                    ? "Carregando..."
+                    : notificacoesAtivas
+                    ? "Desativar"
+                    : "Ativar"
+                }
                 onPress={salvarNotificacoes}
+                disabled={notificacoesAtivas === null}
               />
 
               <Button
