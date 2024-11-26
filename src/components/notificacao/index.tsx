@@ -1,3 +1,4 @@
+import notificacaoService from "@/src/services/notificacao.service";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as Notifications from "expo-notifications";
 import React, { useEffect, useState } from "react";
@@ -64,17 +65,26 @@ export const NotificacaoSettings: React.FC<NotificacaoSettingsProps> = ({
     setShowRaioModal(true);
   };
 
-  const salvarNotificacoes = () => {
-    setNotificacoesAtivas((prev) => !prev);
-    setShowNotificacaoModal(false);
-    console.log(
-      `Notificações ${notificacoesAtivas ? "desativadas" : "ativadas"}`
-    );
+  const salvarNotificacoes = async () => {
+    try {
+      const novoEstadoNotificacoes = !notificacoesAtivas;
+      await notificacaoService.patchNotificacaoUsuario(novoEstadoNotificacoes);
+      setNotificacoesAtivas(novoEstadoNotificacoes);
+      setShowNotificacaoModal(false);
 
-    if (notificacoesAtivas) {
-      scheduleNotification(horarioNotificacao);
-    } else {
-      Notifications.cancelAllScheduledNotificationsAsync();
+      console.log(
+        `Notificações ${novoEstadoNotificacoes ? "ativadas" : "desativadas"}`
+      );
+
+      if (novoEstadoNotificacoes) {
+        scheduleNotification(horarioNotificacao);
+      } else {
+        Notifications.cancelAllScheduledNotificationsAsync();
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar notificações:", error);
+
+      Alert.alert("Erro", "Não foi possível atualizar as notificações");
     }
   };
 

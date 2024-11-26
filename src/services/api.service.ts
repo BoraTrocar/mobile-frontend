@@ -124,4 +124,30 @@ export class ApiService {
       throw new Error(errorMessage);
     }
   }
+
+  async patch(endpoint: string, data: any, headers?: Headers) {
+    try {
+      const authHeaders = await this.getAuthHeaders();
+      const url = `${this.URL}${endpoint}`;
+      const response = await axios.patch(url, data, {
+        headers: {
+          ...authHeaders,
+          ...headers,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      let errorMessage = "Erro inesperado";
+
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data?.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      console.error("Erro ao fazer a requisição PATCH:", errorMessage);
+      throw new Error(errorMessage);
+    }
+  }
 }
