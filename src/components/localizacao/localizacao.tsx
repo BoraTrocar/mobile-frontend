@@ -1,5 +1,6 @@
 import { useRaio } from "@/RaioContext";
-import React, { useState } from "react";
+import localizacaoService from "@/src/services/localizacao.service";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Button,
@@ -22,20 +23,42 @@ export const LocationSettingsModal: React.FC<LocationSettingsModalProps> = ({
   const { raio, setRaio } = useRaio();
   const [inputRaio, setInputRaio] = useState("");
 
-  const salvarRaio = () => {
-    const valor = parseInt(inputRaio);
+  //MANO NEM SEI COMO DEU CERTO
+  useEffect(() => {
+    if (visible) {
+      setInputRaio(raio ? raio.toString() : "");
+    }
+  }, [visible, raio]);
+
+  const salvarRaio = async () => {
+    const valor = parseFloat(inputRaio);
     if (!isNaN(valor) && valor > 0) {
-      setRaio(valor);
-      setInputRaio("");
-      onClose();
-      console.log(`Raio de ${valor} km definido.`);
+      try {
+        await localizacaoService.patchRaioUsuario(valor);
+
+        setRaio(valor);
+        setInputRaio("");
+        onClose();
+        console.log(`Raio de ${valor} km definido.`);
+      } catch (error) {
+        console.error("Erro ao atualizar raio:", error);
+        Alert.alert(
+          "Erro",
+          "Não foi possível atualizar o raio. Tente novamente."
+        );
+      }
     } else {
       Alert.alert("Valor inválido", "Insira um número válido.");
     }
   };
 
   return (
-    <Modal transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      transparent={true}
+      animationType="slide"
+      onRequestClose={onClose}
+    >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Configuração de Localização</Text>
@@ -50,8 +73,8 @@ export const LocationSettingsModal: React.FC<LocationSettingsModalProps> = ({
             placeholder="Digite o raio em km"
           />
           <View style={styles.buttonContainer}>
-            <Button title="Cancelar" onPress={onClose} />
-            <Button title="Salvar" onPress={salvarRaio} />
+            <Button title="Cancelar" onPress={onClose} color="gray" />
+            <Button title="Salvar" onPress={salvarRaio} color="green" />
           </View>
         </View>
       </View>

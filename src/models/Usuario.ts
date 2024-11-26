@@ -8,4 +8,5 @@ export interface Usuario {
   tipoConta: string;
   anunciosPostados: LivroProps[]; // Lista de livros
   notificacao: boolean;
+  raio: string;
 }
