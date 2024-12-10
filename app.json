@@ -2,24 +2,26 @@
   "expo": {
     "name": "boraTrocarMobile",
     "slug": "boraTrocarMobile",
-    "version": "1.0.0",
+    "version": "2.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/images/logo.png",
+      "resizeMode": "native",
+      "backgroundColor": "#E3F2FD"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fatec.boratrocarMobile"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.fatec.boratrocarMobile"
     },
     "web": {
       "bundler": "metro",
@@ -27,10 +29,27 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "835274695440840",
+          "clientToken": "32ec9e7d9970ee47bbf460376fa22543",
+          "displayName": "BoraTrocar",
+          "scheme": "fb835274695440840",
+          "advertiserIDCollectionEnabled": false,
+          "autoLogAppEventsEnabled": false,
+          "isAutoInitEnabled": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "84f90472-e121-450e-93ee-f4f7d2db1cf4"
+      }
     }
   }
-}
+} 
