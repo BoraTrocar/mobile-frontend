@@ -7,8 +7,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 type LocationContextType = {
   cidade: string | null;
-  latitude: number | null; // Adicione essa linha
-  longitude: number | null; // Adicione essa linha
+  latitude: number | null;
+  longitude: number | null;
   atualizaLocalizacao: () => Promise<void>;
 };
 
@@ -20,8 +20,8 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [cidade, setCidade] = useState<string | null>(null);
-  const [latitude, setLatitude] = useState<number | null>(null); // Adicione essa linha
-  const [longitude, setLongitude] = useState<number | null>(null); // Adicione essa linha
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
 
   const atualizaLocalizacao = async () => {
     try {
@@ -30,8 +30,8 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({
         const currentPosition = await getCurrentPositionAsync();
         const { latitude, longitude } = currentPosition.coords;
 
-        setLatitude(latitude); // Adicione essa linha
-        setLongitude(longitude); // Adicione essa linha
+        setLatitude(latitude);
+        setLongitude(longitude);
 
         fetchCidadeCoordenadas(latitude, longitude);
         console.log(latitude);

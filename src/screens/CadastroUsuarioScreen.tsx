@@ -65,17 +65,43 @@ export default function CadastroUsuarioScreen() {
       if (!data) {
         throw new Error("Something went wrong obtaining access token");
       }
+      const accessToken = data.accessToken;
+
+      await sendTokenToBackend(accessToken);
+
       const auth = getAuth(app);
-
-      const credential = FacebookAuthProvider.credential(data.accessToken);
+      const credential = FacebookAuthProvider.credential(accessToken);
       const userCredential = await signInWithCredential(auth, credential);
-      const user = userCredential.user;
 
-      // Aqui você pode acessar os dados do usuário
-      console.log("Usuário logado:", user);
+      console.log("Usuário logado:", userCredential.user);
       Alert.alert("Sucesso", "Usuário cadastrado ou logado com sucesso!");
     } catch (error) {
       console.error("Erro durante o login com o Facebook:", error);
+    }
+  };
+
+  //teste de login social
+  const sendTokenToBackend = async (accessToken: any) => {
+    try {
+      const response = await fetch(
+        "https://boratrocar.net:8090/tokenteste/teste",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ accessToken }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Token enviado com sucesso:", data);
+      } else {
+        console.error("Erro ao enviar o token:", data);
+      }
+    } catch (error) {
+      console.error("Erro de rede:", error);
     }
   };
 

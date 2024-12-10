@@ -11,7 +11,7 @@ export function CadastroImg({ img, onImageSelect }: CadastroImg) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
     });
 
@@ -23,7 +23,7 @@ export function CadastroImg({ img, onImageSelect }: CadastroImg) {
   const handleOpenCamera = async () => {
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [3, 4],
       quality: 1,
     });
 

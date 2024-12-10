@@ -1,69 +1,121 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  signInWithCredential,
+} from "firebase/auth";
 import React, { useState } from "react";
 import {
   Image,
+  Linking,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { AccessToken, LoginManager } from "react-native-fbsdk-next";
 import { useTheme } from "react-native-paper";
+import { app } from "../../firebaseConfig";
+import { useAuth } from "../hooks/useAuth";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { UsuarioService } from "../services/usuario.service";
 import styles from "../styles/LoginScreenStyles";
-import { removeToken, setToken } from "../token/tokenStorage"; // Importa a função para salvar o token
-import { useAuth } from "../hooks/useAuth";
-import {
-  FacebookAuthProvider,
-  getAuth,
-  signInWithCredential,
-  //onAuthStateChanged,
-} from "firebase/auth";
-import {
-  AccessToken,
-  AuthenticationToken,
-  LoginManager,
-} from "react-native-fbsdk-next";
-import {app} from "../../firebaseConfig"
+import { removeToken, setToken } from "../token/tokenStorage";
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "Home"
->;
+>; 
 
 export default function LoginScreen() {
 
-  //Depois tem q coponetizar esta bagaça aqui
+  //Depois que fazer funcionar tem q componetizar esta bagaça aqui
   const SignInWithFB = async () => {
     try {
-      // Attempt login with permissions
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-  
+      const result = await LoginManager.logInWithPermissions([
+        "public_profile",
+        "email",
+      ]);
+
       if (result.isCancelled) {
-        throw new Error('User cancelled login');
+        throw new Error("User cancelled login");
       }
-  
+
       // Get the access token
       const data = await AccessToken.getCurrentAccessToken();
-  
+
       if (!data) {
-        throw new Error('Something went wrong obtaining access token');
+        throw new Error("Something went wrong obtaining access token");
       }
   
+  
+      // Create a Firebase credential with the AccessToken
+
       // Create a Firebase credential with the AccessToken
       const auth = getAuth(app);
-      const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
-  
-      // Sign-in the user with the credential
-      const userCredential = await signInWithCredential(auth, facebookCredential);
-      console.log('User signed in:', userCredential.user);
-  
-      // You can now use userCredential.user to access the signed-in user's information
-      
+      const facebookCredential = FacebookAuthProvider.credential(
+        data.accessToken
+      );
+
+      const userCredential = await signInWithCredential(
+        auth,
+        facebookCredential
+      );
+      console.log("User signed in:", userCredential.user);
     } catch (error) {
-      console.error('Error during Facebook login:', error);
+      console.error("Error during Facebook login:", error);
+    }
+  };
+
+  const SignInWithGitHub = async () => {
+    try {
+      const githubAuthUrl =
+        "https://boratrocar.net:8090/oauth2/authorization/github";
+
+      const supported = await Linking.canOpenURL(githubAuthUrl);
+      console.log("foi");
+
+      if (supported) {
+        await Linking.openURL(githubAuthUrl);
+        console.log("foi2");
+
+        Linking.addEventListener("url", async (event) => {
+          console.log("foi3");
+          try {
+            const response = await fetch(
+              "https://boratrocar.net:8090/oauth2/authorization/github",
+              {
+                method: "GET",
+                headers: {
+                  Accept: "application/json",
+                },
+              }
+            );
+
+            if (response.ok) {
+              console.log(response);
+              const data = await response.json();
+              console.log(data);
+              const token = data.token;
+
+              await setToken(token);
+              console.log(token);
+
+              navigation.navigate("Home");
+            } else {
+              console.error("Erro ao buscar o token");
+            }
+          } catch (error) {
+            console.error("Erro ao processar o token:", error);
+          }
+        });
+      } else {
+        console.error("Cannot open GitHub authorization URL");
+      }
+    } catch (error) {
+      console.error("Error during GitHub login:", error);
     }
   };
 
@@ -167,13 +219,23 @@ export default function LoginScreen() {
             </Text>
           </TouchableOpacity>
 
-          {/* caralho de login social */}
+          {/* Facebook login button */}
           <TouchableOpacity
             style={styles.continueWithoutLoginButton}
             onPress={SignInWithFB}
           >
             <Text style={styles.continueWithoutLoginText}>
               Continue com o Facebook
+            </Text>
+          </TouchableOpacity>
+
+          {/* New GitHub login button */}
+          <TouchableOpacity
+            style={styles.continueWithoutLoginButton}
+            onPress={SignInWithGitHub}
+          >
+            <Text style={styles.continueWithoutLoginText}>
+              Continue com o GitHub
             </Text>
           </TouchableOpacity>
         </View>
