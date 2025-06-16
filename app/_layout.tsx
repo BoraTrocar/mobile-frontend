@@ -1,5 +1,4 @@
 import { Slot } from "expo-router";
-import { NavigationContainer } from "@react-navigation/native";
 import { RaioProvider } from "@/RaioContext";
 import { Provider as PaperProvider } from "react-native-paper";
 
@@ -7,9 +6,9 @@ export default function RootLayout() {
   return (
     <RaioProvider>
       <PaperProvider>
-        <NavigationContainer>
+        {/* REMOVE THIS: <NavigationContainer> */}
           <Slot />
-        </NavigationContainer>
+        {/* REMOVE THIS: </NavigationContainer> */}
       </PaperProvider>
     </RaioProvider>
   );

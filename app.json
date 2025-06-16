@@ -2,7 +2,7 @@
   "expo": {
     "name": "boraTrocarMobile",
     "slug": "boraTrocarMobile",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -41,7 +41,9 @@
           "autoLogAppEventsEnabled": false,
           "isAutoInitEnabled": true
         }
-      ]
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
@@ -52,4 +54,4 @@
       }
     }
   }
-} 
+}
