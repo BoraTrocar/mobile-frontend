@@ -1,4 +1,4 @@
-name: 'Build Android APK with EAS'
+name: 'Build Android APK com EAS'
 
 on:
   workflow_dispatch
@@ -7,26 +7,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Fazer checkout do código
         uses: actions/checkout@v4.1.7
 
-      - name: Setup Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v4.0.3
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Instalar dependências
+        run: yarn install
 
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
+      - name: Instalar EAS CLI
+        run: yarn global add eas-cli
 
-      - name: Login no EAS (Expo)
+      - name: Fazer login no EAS (Expo)
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas whoami || eas login --token $EXPO_TOKEN
 
-      - name: Build APK de produção
+      - name: Gerar APK de produção
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: eas build --platform android --profile production --non-interactive | tee build.log
@@ -35,7 +35,7 @@ jobs:
         run: |
           grep -o 'https://expo.dev/artifacts[^ ]*\.apk' build.log > apk-url.txt
 
-      - name: Upload APK URL como artefato
+      - name: Fazer upload do link do APK como artefato
         uses: actions/upload-artifact@v4.3.6
         with:
           name: apk-url
