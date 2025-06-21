@@ -1,7 +1,8 @@
 {
   "expo": {
+    "owner": "patricialais",
     "name": "boraTrocarMobile",
-    "slug": "boraTrocarMobile",
+    "slug": "boratrocar",
     "version": "2.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -14,14 +15,34 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.fatec.boratrocarMobile"
+      "bundleIdentifier": "com.fatec.boratrocarMobile",
+      "infoPlist": {
+        "SKAdNetworkItems": [
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.fatec.boratrocarMobile"
+      "package": "com.fatec.boratrocarMobile",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -50,8 +71,15 @@
     },
     "extra": {
       "eas": {
-        "projectId": "84f90472-e121-450e-93ee-f4f7d2db1cf4"
-      }
+        "projectId": "96c630ad-9f8c-4373-8ed3-061d15230133"
+      },
+      "router": {}
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/96c630ad-9f8c-4373-8ed3-061d15230133"
     }
   }
 }

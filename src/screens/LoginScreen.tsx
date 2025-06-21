@@ -72,7 +72,7 @@ export default function LoginScreen() {
   const SignInWithGitHub = async () => {
     try {
       const githubAuthUrl =
-        "https://boratrocar.net:8090/oauth2/authorization/github";
+        "https://boratrocar.company:8090/oauth2/authorization/github";
 
       const supported = await Linking.canOpenURL(githubAuthUrl);
       console.log("foi");
@@ -85,7 +85,7 @@ export default function LoginScreen() {
           console.log("foi3");
           try {
             const response = await fetch(
-              "https://boratrocar.net:8090/oauth2/authorization/github",
+              "https://boratrocar.company:8090/oauth2/authorization/github",
               {
                 method: "GET",
                 headers: {

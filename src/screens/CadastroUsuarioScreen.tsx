@@ -84,7 +84,7 @@ export default function CadastroUsuarioScreen() {
   const sendTokenToBackend = async (accessToken: any) => {
     try {
       const response = await fetch(
-        "https://boratrocar.net:8090/tokenteste/teste",
+        "https://boratrocar.company:8090/tokenteste/teste",
         {
           method: "POST",
           headers: {
