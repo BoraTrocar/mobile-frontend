@@ -1,7 +1,7 @@
 {
   "expo": {
     "owner": "patricialais",
-    "name": "boraTrocarMobile",
+    "name": "boratrocar",
     "slug": "boratrocar",
     "version": "2.3.0",
     "orientation": "portrait",
@@ -40,7 +40,6 @@
       },
       "package": "com.fatec.boratrocarMobile",
       "permissions": [
-        "android.permission.INTERNET",
         "android.permission.INTERNET"
       ]
     },
