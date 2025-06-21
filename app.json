@@ -3,7 +3,7 @@
     "owner": "patricialais",
     "name": "boratrocar",
     "slug": "boratrocar",
-    "version": "2.3.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -74,9 +74,7 @@
       },
       "router": {}
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/96c630ad-9f8c-4373-8ed3-061d15230133"
     }
