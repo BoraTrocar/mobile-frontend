@@ -1,0 +1,101 @@
+name: 'Local - Build & Release Android APK com EAS'
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      apk-path: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          yarn install
+          yarn global add eas-cli
+
+      - name: Cache SDK Android
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android
+            $HOME/android-sdk
+          key: ${{ runner.os }}-android-sdk-v1
+
+      - name: Instalar JDK e SDK Android
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk wget unzip
+          wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O tools.zip
+          unzip tools.zip
+          mkdir -p "$HOME/android-sdk/cmdline-tools/latest"
+          mv cmdline-tools/* "$HOME/android-sdk/cmdline-tools/latest/"
+          export ANDROID_SDK_ROOT="$HOME/android-sdk"
+          export PATH="$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      - name: Build APK localmente
+        env:
+          ANDROID_SDK_ROOT: ${{ env.HOME }}/android-sdk
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EAS_LOCAL_BUILD_ARTIFACTS_DIR: ${{ github.workspace }}/build-output
+        run: |
+          eas build \
+            --platform android \
+            --local \
+            --profile production
+
+      - name: Ver conteúdo de build-output
+        run: |
+          echo "Arquivos em build-output:"
+          ls -lah build-output
+
+      - name: Upload do APK como artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build-output/*.apk
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar APK
+        uses: actions/download-artifact@v4
+        with:
+          name: app-release-apk
+          path: downloaded_apk
+
+      - name: Criar/Atualizar release 'latest' com APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Release – latest"
+          body: |
+            🔄 Última build automática publicada.
+            - Commit: ${{ github.sha }}
+            - Gerado em: ${{ github.run_started_at }}
+          files: downloaded_apk/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
