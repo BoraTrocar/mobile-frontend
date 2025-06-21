@@ -10,7 +10,7 @@
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/logo.png",
-      "resizeMode": "native",
+      "resizeMode": "contain",
       "backgroundColor": "#E3F2FD"
     },
     "ios": {
